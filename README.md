@@ -1,4 +1,4 @@
-# Firefds Kit [UDC]
+# Firefds Kit [Baklava]
 
 Xposed module for Samsung devices running Android 14 to Android 16 (One UI 6 - 8).
 
