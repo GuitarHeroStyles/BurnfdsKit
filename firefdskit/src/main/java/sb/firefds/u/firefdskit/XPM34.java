@@ -17,6 +17,7 @@ package sb.firefds.u.firefdskit;
 import static de.robv.android.xposed.XposedBridge.hookMethod;
 import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static sb.firefds.u.firefdskit.utils.Packages.FIREFDSKIT;
@@ -54,7 +55,7 @@ public class XPM34 {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) {
                         try {
-                            grantPermissions(param);
+                            grantPermissions(param.thisObject, param.args[0]);
                         } catch (Throwable e) {
                             log(e);
                         }
@@ -65,13 +66,25 @@ public class XPM34 {
             if (hooked == 0) {
                 log("FFK: restorePermissionState not found in " + PERMISSION_MANAGER_SERVICE);
             }
+
+            // restorePermissionState may run before the hook is installed (or not at all for unchanged
+            // packages), so grant again once the system is ready.
+            hookMethod(pmServiceClass.getDeclaredMethod("onSystemReady"), new XC_MethodHook() {
+                @Override
+                protected void afterHookedMethod(MethodHookParam param) {
+                    try {
+                        grantAfterSystemReady(param.thisObject, classLoader);
+                    } catch (Throwable e) {
+                        log(e);
+                    }
+                }
+            });
         } catch (Throwable e) {
             log(e);
         }
     }
 
-    private static void grantPermissions(XC_MethodHook.MethodHookParam param) {
-        final Object pkg = param.args[0];
+    private static void grantPermissions(Object permissionManager, Object pkg) {
         if (pkg == null) {
             return;
         }
@@ -80,15 +93,15 @@ public class XPM34 {
             return;
         }
         log("FFK: granting permissions to " + pkgName);
-        final Object mRegistry = getObjectField(param.thisObject, "mRegistry");
+        final Object mRegistry = getObjectField(permissionManager, "mRegistry");
         if (pkgName.equals(FIREFDSKIT)) {
-            grantInstallPermission(mRegistry, STATUSBAR, pkg, param.thisObject);
-            grantInstallPermission(mRegistry, WRITE_SETTINGS, pkg, param.thisObject);
-            grantInstallPermission(mRegistry, POST_NOTIFICATIONS, pkg, param.thisObject);
+            grantInstallPermission(mRegistry, STATUSBAR, pkg, permissionManager);
+            grantInstallPermission(mRegistry, WRITE_SETTINGS, pkg, permissionManager);
+            grantInstallPermission(mRegistry, POST_NOTIFICATIONS, pkg, permissionManager);
         }
-        grantInstallPermission(mRegistry, REBOOT, pkg, param.thisObject);
-        grantInstallPermission(mRegistry, RECOVERY, pkg, param.thisObject);
-        grantInstallPermission(mRegistry, ACCESS_SCREEN_RECORDER_SVC, pkg, param.thisObject);
+        grantInstallPermission(mRegistry, REBOOT, pkg, permissionManager);
+        grantInstallPermission(mRegistry, RECOVERY, pkg, permissionManager);
+        grantInstallPermission(mRegistry, ACCESS_SCREEN_RECORDER_SVC, pkg, permissionManager);
     }
 
     private static void grantInstallPermission(Object mRegistry,
@@ -103,6 +116,23 @@ public class XPM34 {
         } catch (Throwable e) {
             log("FFK: failed to grant " + permission);
             log(e);
+        }
+    }
+
+    private static void grantAfterSystemReady(Object permissionManager, ClassLoader classLoader) {
+        final Class<?> localServices = findClass("com.android.server.LocalServices", classLoader);
+        final Class<?> pmInternal = findClass("com.android.server.pm.PackageManagerInternal", classLoader);
+        final Object pmi = callStaticMethod(localServices, "getService", pmInternal);
+        final Object lock = getObjectField(permissionManager, "mLock");
+        for (String name : new String[]{FIREFDSKIT, SYSTEM_UI}) {
+            final Object pkg = callMethod(pmi, "getPackage", name);
+            if (pkg == null) {
+                log("FFK: package not found on system ready: " + name);
+                continue;
+            }
+            synchronized (lock) {
+                grantPermissions(permissionManager, pkg);
+            }
         }
     }
 }
