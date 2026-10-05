@@ -39,7 +39,10 @@ public class XPM34 {
     private static final String ACCESS_SCREEN_RECORDER_SVC = "com.samsung.android.app.screenrecorder.permission" +
                                                              ".ACCESS_SCREEN_RECORDER_SVC";
 
+    private static boolean restoreLogged;
+
     public static void doHook(ClassLoader classLoader) {
+        log("FFK: XPM34.doHook started");
         try {
             final Class<?> pmServiceClass = findClass(PERMISSION_MANAGER_SERVICE, classLoader);
 
@@ -54,6 +57,10 @@ public class XPM34 {
                 hookMethod(method, new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) {
+                        if (!restoreLogged) {
+                            restoreLogged = true;
+                            log("FFK: restorePermissionState called, first package: " + param.args[0]);
+                        }
                         try {
                             grantPermissions(param.thisObject, param.args[0]);
                         } catch (Throwable e) {
@@ -63,15 +70,15 @@ public class XPM34 {
                 });
                 hooked++;
             }
-            if (hooked == 0) {
-                log("FFK: restorePermissionState not found in " + PERMISSION_MANAGER_SERVICE);
-            }
+            log("FFK: hooked " + hooked + " restorePermissionState method(s) in " + PERMISSION_MANAGER_SERVICE);
 
             // restorePermissionState may run before the hook is installed (or not at all for unchanged
             // packages), so grant again once the system is ready.
-            hookMethod(pmServiceClass.getDeclaredMethod("onSystemReady"), new XC_MethodHook() {
+            Method onSystemReady = pmServiceClass.getDeclaredMethod("onSystemReady");
+            hookMethod(onSystemReady, new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) {
+                    log("FFK: PermissionManagerServiceImpl.onSystemReady called");
                     try {
                         grantAfterSystemReady(param.thisObject, classLoader);
                     } catch (Throwable e) {
