@@ -13,7 +13,7 @@ allprojects {
     repositories {
         mavenCentral()
         google()
-        maven { url "https://jcenter.bintray.com" }
+        maven { url "https://api.xposed.info/" }
         maven { url 'https://jitpack.io' }
     }
 }
