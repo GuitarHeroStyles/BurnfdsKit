@@ -2,6 +2,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission
+        android:name="android.permission.REBOOT"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.RECOVERY"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.EXPAND_STATUS_BAR" />
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="com.samsung.android.app.screenrecorder.permission.ACCESS_SCREEN_RECORDER_SVC" />
+
     <application
         android:allowBackup="false"
         android:dataExtractionRules="@xml/backup_rules"

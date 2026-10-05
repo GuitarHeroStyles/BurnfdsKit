@@ -202,6 +202,13 @@ public class FirefdsKitActivity extends AppCompatActivity implements NavigationV
         } else {
             if (permissionDeniedList.size() > 0) {
                 setCardStatus(R.drawable.ic_error, R.string.no_permissions, R.color.no_permissions);
+                TextView statusText = findViewById(R.id.xposed_status_text);
+                statusText.append("\n\nMissing: " + String.join(", ",
+                                                              permissionDeniedList.stream()
+                                                                                  .map(permission -> permission.substring(
+                                                                                          permission.lastIndexOf('.') +
+                                                                                          1))
+                                                                                  .toArray(String[]::new)));
             } else {
                 setCardStatus(R.drawable.ic_check_circle, R.string.xposed_status, R.color.active);
             }

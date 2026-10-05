@@ -79,6 +79,7 @@ public class XPM34 {
         if (!FIREFDSKIT.equals(pkgName) && !SYSTEM_UI.equals(pkgName)) {
             return;
         }
+        log("FFK: granting permissions to " + pkgName);
         final Object mRegistry = getObjectField(param.thisObject, "mRegistry");
         if (pkgName.equals(FIREFDSKIT)) {
             grantInstallPermission(mRegistry, STATUSBAR, pkg, param.thisObject);
@@ -98,6 +99,7 @@ public class XPM34 {
             Object bp = callMethod(mRegistry, "getPermission", permission);
             Object uidState = callMethod(permissionManager, "getUidStateLocked", pkg, 0);
             callMethod(uidState, "grantPermission", bp);
+            log("FFK: granted " + permission);
         } catch (Throwable e) {
             log("FFK: failed to grant " + permission);
             log(e);
