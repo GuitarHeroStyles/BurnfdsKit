@@ -14,21 +14,21 @@
  */
 package sb.firefds.u.firefdskit;
 
+import static de.robv.android.xposed.XposedBridge.hookMethod;
 import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static sb.firefds.u.firefdskit.utils.Packages.FIREFDSKIT;
 import static sb.firefds.u.firefdskit.utils.Packages.SYSTEM_UI;
+
+import java.lang.reflect.Method;
 
 import de.robv.android.xposed.XC_MethodHook;
 
 public class XPM34 {
     private static final String PERMISSION = "com.android.server.pm.permission";
     private static final String PERMISSION_MANAGER_SERVICE = PERMISSION + ".PermissionManagerServiceImpl";
-    private static final String ANDROID_PACKAGE = "com.android.server.pm.pkg.AndroidPackage";
-    private static final String PERMISSION_CALLBACK = PERMISSION_MANAGER_SERVICE + ".PermissionCallback";
 
     private static final String REBOOT = "android.permission.REBOOT";
     private static final String WRITE_SETTINGS = "android.permission.WRITE_SETTINGS";
@@ -41,56 +41,66 @@ public class XPM34 {
     public static void doHook(ClassLoader classLoader) {
         try {
             final Class<?> pmServiceClass = findClass(PERMISSION_MANAGER_SERVICE, classLoader);
-            final Class<?> pmCallbackClass = findClass(PERMISSION_CALLBACK, classLoader);
 
-            findAndHookMethod(pmServiceClass,
-                              "restorePermissionState",
-                              ANDROID_PACKAGE,
-                              boolean.class,
-                              String.class,
-                              pmCallbackClass,
-                              int.class,
-                              new XC_MethodHook() {
-                                  @Override
-                                  protected void afterHookedMethod(MethodHookParam param) {
-                                      final Object pkg = param.args[0];
-                                      final String pkgName = (String) callMethod(param.args[0], "getPackageName");
-                                      if (pkgName.equals(FIREFDSKIT) || pkgName.equals(SYSTEM_UI)) {
-                                          final Object mRegistry = getObjectField(param.thisObject, "mRegistry");
-                                          switch (pkgName) {
-                                              case FIREFDSKIT:
-                                                  grantInstallPermission(mRegistry, STATUSBAR, pkg, param.thisObject);
-                                                  grantInstallPermission(mRegistry,
-                                                                         WRITE_SETTINGS,
-                                                                         pkg,
-                                                                         param.thisObject);
-                                                  grantInstallPermission(mRegistry,
-                                                                         POST_NOTIFICATIONS,
-                                                                         pkg,
-                                                                         param.thisObject);
-                                              case SYSTEM_UI:
-                                                  grantInstallPermission(mRegistry, REBOOT, pkg, param.thisObject);
-                                                  grantInstallPermission(mRegistry, RECOVERY, pkg, param.thisObject);
-                                                  grantInstallPermission(mRegistry,
-                                                                         ACCESS_SCREEN_RECORDER_SVC,
-                                                                         pkg,
-                                                                         param.thisObject);
-                                                  break;
-                                          }
-                                      }
-                                  }
-                              });
+            // The signature of restorePermissionState changed between Android releases
+            // (AndroidPackage -> PackageState, extra/removed params), so hook every overload by name.
+            int hooked = 0;
+            for (Method method : pmServiceClass.getDeclaredMethods()) {
+                if (!method.getName().equals("restorePermissionState") ||
+                    method.getParameterTypes().length == 0) {
+                    continue;
+                }
+                hookMethod(method, new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) {
+                        try {
+                            grantPermissions(param);
+                        } catch (Throwable e) {
+                            log(e);
+                        }
+                    }
+                });
+                hooked++;
+            }
+            if (hooked == 0) {
+                log("FFK: restorePermissionState not found in " + PERMISSION_MANAGER_SERVICE);
+            }
         } catch (Throwable e) {
             log(e);
         }
+    }
+
+    private static void grantPermissions(XC_MethodHook.MethodHookParam param) {
+        final Object pkg = param.args[0];
+        if (pkg == null) {
+            return;
+        }
+        final String pkgName = (String) callMethod(pkg, "getPackageName");
+        if (!FIREFDSKIT.equals(pkgName) && !SYSTEM_UI.equals(pkgName)) {
+            return;
+        }
+        final Object mRegistry = getObjectField(param.thisObject, "mRegistry");
+        if (pkgName.equals(FIREFDSKIT)) {
+            grantInstallPermission(mRegistry, STATUSBAR, pkg, param.thisObject);
+            grantInstallPermission(mRegistry, WRITE_SETTINGS, pkg, param.thisObject);
+            grantInstallPermission(mRegistry, POST_NOTIFICATIONS, pkg, param.thisObject);
+        }
+        grantInstallPermission(mRegistry, REBOOT, pkg, param.thisObject);
+        grantInstallPermission(mRegistry, RECOVERY, pkg, param.thisObject);
+        grantInstallPermission(mRegistry, ACCESS_SCREEN_RECORDER_SVC, pkg, param.thisObject);
     }
 
     private static void grantInstallPermission(Object mRegistry,
                                                String permission,
                                                Object pkg,
                                                Object permissionManager) {
-        Object bp = callMethod(mRegistry, "getPermission", permission);
-        Object uidState = callMethod(permissionManager, "getUidStateLocked", pkg, 0);
-        callMethod(uidState, "grantPermission", bp);
+        try {
+            Object bp = callMethod(mRegistry, "getPermission", permission);
+            Object uidState = callMethod(permissionManager, "getUidStateLocked", pkg, 0);
+            callMethod(uidState, "grantPermission", bp);
+        } catch (Throwable e) {
+            log("FFK: failed to grant " + permission);
+            log(e);
+        }
     }
 }

@@ -1,6 +1,6 @@
 # Firefds Kit [UDC]
 
-Xposed module for Samsung U (Android 14) devices.
+Xposed module for Samsung devices running Android 14 to Android 16 (One UI 6 - 8).
 
 ## Features
 

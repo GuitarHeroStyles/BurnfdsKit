@@ -41,7 +41,7 @@
             android:value="93" />
         <meta-data
             android:name="xposeddescription"
-            android:value="Made for stock Samsung devices supporting Android 14.0 Roms by Firefds" />
+            android:value="Made for stock Samsung devices supporting Android 14 - 16 Roms by Firefds" />
 
         <meta-data
             android:name="xposedsharedprefs"
