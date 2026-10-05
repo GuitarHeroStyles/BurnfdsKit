@@ -86,7 +86,11 @@ public class XAndroidPackage {
     public static void doHook(ClassLoader classLoader) {
 
         try {
+        } catch (Throwable e) {
+            log(e);
+        }
 
+        try {
             findAndHookMethod(DEVICE_POLICY_MANAGER_SERVICE,
                               classLoader,
                               "semGetAllowStorageCard",
@@ -100,26 +104,49 @@ public class XAndroidPackage {
                                       }
                                   }
                               });
+        } catch (Throwable e) {
+            log(e);
+        }
 
+        try {
             Class<?> shutdownThreadClass = findClass(SHUTDOWN_THREAD, classLoader);
-            findAndHookMethod(shutdownThreadClass,
-                              "rebootOrShutdown",
-                              Context.class,
-                              boolean.class,
-                              String.class,
-                              new XC_MethodHook() {
-                                  @Override
-                                  protected void beforeHookedMethod(MethodHookParam param) {
-                                      if (reloadAndGetBooleanPref(PREF_DEFAULT_REBOOT_BEHAVIOR, false)) {
-                                          boolean reboot = (boolean) param.args[1];
-                                          String reason = (String) param.args[2];
-                                          if (reboot && reason.equals("userrequested")) {
-                                              param.args[2] = "recovery";
-                                          }
-                                      }
-                                  }
-                              });
+            XC_MethodHook rebootHook = new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) {
+                    if (!reloadAndGetBooleanPref(PREF_DEFAULT_REBOOT_BEHAVIOR, false)) {
+                        return;
+                    }
+                    // Argument positions differ between One UI releases, so locate them by type
+                    int rebootIdx = -1;
+                    int reasonIdx = -1;
+                    for (int k = 0; k < param.args.length; k++) {
+                        if (param.args[k] instanceof Boolean && rebootIdx < 0) {
+                            rebootIdx = k;
+                        } else if (param.args[k] instanceof String && reasonIdx < 0) {
+                            reasonIdx = k;
+                        }
+                    }
+                    if (rebootIdx >= 0 && reasonIdx >= 0 && (boolean) param.args[rebootIdx] &&
+                        "userrequested".equals(param.args[reasonIdx])) {
+                        param.args[reasonIdx] = "recovery";
+                    }
+                }
+            };
+            int hooked = 0;
+            for (java.lang.reflect.Method method : shutdownThreadClass.getDeclaredMethods()) {
+                if (method.getName().equals("rebootOrShutdown")) {
+                    de.robv.android.xposed.XposedBridge.hookMethod(method, rebootHook);
+                    hooked++;
+                }
+            }
+            if (hooked == 0) {
+                log("FFK: ShutdownThread.rebootOrShutdown not found");
+            }
+        } catch (Throwable e) {
+            log(e);
+        }
 
+        try {
             if (mPackageManagerServiceContext == null) {
                 findAndHookConstructor(PACKAGE_MANAGER_SERVICE,
                                        classLoader,
@@ -133,7 +160,11 @@ public class XAndroidPackage {
                                            }
                                        });
             }
+        } catch (Throwable e) {
+            log(e);
+        }
 
+        try {
             findAndHookMethod(PACKAGE_MANAGER_SERVICE_UTILS,
                               classLoader,
                               "compareSignatures",
@@ -150,7 +181,11 @@ public class XAndroidPackage {
                                       }
                                   }
                               });
+        } catch (Throwable e) {
+            log(e);
+        }
 
+        try {
             findAndHookMethod(PACKAGE_MANAGER_SERVICE_UTILS,
                               classLoader,
                               "matchSignaturesCompat",
@@ -168,7 +203,11 @@ public class XAndroidPackage {
                                       }
                                   }
                               });
+        } catch (Throwable e) {
+            log(e);
+        }
 
+        try {
             findAndHookMethod(PACKAGE_MANAGER_SERVICE_UTILS,
                               classLoader,
                               "matchSignaturesRecover",
@@ -187,7 +226,11 @@ public class XAndroidPackage {
                                       }
                                   }
                               });
+        } catch (Throwable e) {
+            log(e);
+        }
 
+        try {
             findAndHookMethod(UserManager.class, "supportsMultipleUsers", new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) {
@@ -196,7 +239,11 @@ public class XAndroidPackage {
                     }
                 }
             });
+        } catch (Throwable e) {
+            log(e);
+        }
 
+        try {
             findAndHookMethod(UserManager.class, "getMaxSupportedUsers", new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) {
@@ -205,7 +252,11 @@ public class XAndroidPackage {
                     }
                 }
             });
+        } catch (Throwable e) {
+            log(e);
+        }
 
+        try {
             findAndHookMethod(STATUS_BAR_MANAGER_SERVICE,
                               classLoader,
                               "setIconVisibility",
@@ -221,7 +272,11 @@ public class XAndroidPackage {
                                       }
                                   }
                               });
+        } catch (Throwable e) {
+            log(e);
+        }
 
+        try {
             findAndHookMethod(USB_HANDLER, classLoader, "updateUsbNotification", boolean.class, new XC_MethodHook() {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam param) {
@@ -230,7 +285,11 @@ public class XAndroidPackage {
                     }
                 }
             });
+        } catch (Throwable e) {
+            log(e);
+        }
 
+        try {
             findAndHookMethod(PHONE_WINDOW_MANAGER,
                               classLoader,
                               "init",
@@ -300,7 +359,11 @@ public class XAndroidPackage {
                                       }
                                   }
                               });
+        } catch (Throwable e) {
+            log(e);
+        }
 
+        try {
             findAndHookMethod(PHONE_WINDOW_MANAGER,
                               classLoader,
                               "interceptKeyBeforeQueueing",

@@ -52,6 +52,11 @@ public class XSmartCapturePackage {
                                   }
                               });
 
+        } catch (Throwable e) {
+            log(e);
+        }
+
+        try {
             Class<?> recordingStopReason = findClass(RECORDING_STOP_REASON, classLoader);
             findAndHookMethod(SCREEN_RECORDER_CONTROLLER,
                               classLoader,
@@ -67,7 +72,7 @@ public class XSmartCapturePackage {
                                       }
                                   }
                               });
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log(e);
         }
 
@@ -80,6 +85,11 @@ public class XSmartCapturePackage {
                                       PREF_ENABLE_SCREEN_RECORDER_IN_CALL,
                                       false)));
 
+        } catch (Throwable e) {
+            log(e);
+        }
+
+        try {
             findAndHookMethod(SCREEN_RECORDER_UTILS,
                               classLoader,
                               "isDuringPsCallState",
@@ -87,7 +97,7 @@ public class XSmartCapturePackage {
                               XC_MethodReplacement.returnConstant(!reloadAndGetBooleanPref(
                                       PREF_ENABLE_SCREEN_RECORDER_IN_CALL,
                                       false)));
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log(e);
         }
     }

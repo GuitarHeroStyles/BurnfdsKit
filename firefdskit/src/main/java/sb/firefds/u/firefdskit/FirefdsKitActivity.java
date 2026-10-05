@@ -136,7 +136,7 @@ public class FirefdsKitActivity extends AppCompatActivity implements NavigationV
 
         super.onCreate(savedInstanceState);
         appContext = isDeviceEncrypted() ? createDeviceProtectedStorageContext() : this;
-        sharedPreferences = appContext.getSharedPreferences(PREFS, MODE_WORLD_READABLE);
+        sharedPreferences = getPrefs(appContext);
         activity = this;
 
         List<String> permissionDeniedList = checkPermissions();
@@ -351,10 +351,22 @@ public class FirefdsKitActivity extends AppCompatActivity implements NavigationV
 
     @SuppressLint("WorldReadableFiles")
     @SuppressWarnings("deprecation")
+    private static SharedPreferences getPrefs(Context context) {
+        try {
+            return context.getSharedPreferences(PREFS, MODE_WORLD_READABLE);
+        } catch (SecurityException e) {
+            // Newer Android versions reject MODE_WORLD_READABLE when the framework hook is not active
+            Log.e("FFK", "MODE_WORLD_READABLE not supported, falling back to private prefs");
+            return context.getSharedPreferences(PREFS, MODE_PRIVATE);
+        }
+    }
+
+    @SuppressLint("WorldReadableFiles")
+    @SuppressWarnings("deprecation")
     @Override
     protected void attachBaseContext(Context newBase) {
         Context tempContext = isDeviceEncrypted() ? newBase.createDeviceProtectedStorageContext() : newBase;
-        Context context = checkForceEnglish(newBase, tempContext.getSharedPreferences(PREFS, MODE_WORLD_READABLE));
+        Context context = checkForceEnglish(newBase, getPrefs(tempContext));
         super.attachBaseContext(context);
     }
 

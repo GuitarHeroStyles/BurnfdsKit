@@ -199,7 +199,6 @@ public class XSysUIFeaturePackage {
         }
 
         try {
-            Class<?> dumpManager = findClass(DUMP_MANAGER, classLoader);
             findAndHookMethod(SHOW_USING_HIGH_BRIGHTNESS_DIALOG,
                               classLoader,
                               "updateUsingHighBrightnessDialog",
@@ -212,6 +211,12 @@ public class XSysUIFeaturePackage {
                                       }
                                   }
                               });
+        } catch (Throwable e) {
+            log(e);
+        }
+
+        try {
+            Class<?> dumpManager = findClass(DUMP_MANAGER, classLoader);
             findAndHookConstructor(SETTINGS_HELPER, classLoader, Context.class, dumpManager, new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) {
