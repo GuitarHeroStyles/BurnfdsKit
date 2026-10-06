@@ -31,6 +31,7 @@
     <string-array name="reboot_required_preferences">
         <item>disbaleRestartConfirmation</item>
         <item>4gDataIconBehavior</item>
+        <item>4gPlusDataIconBehavior</item>
         <item>5gDataIconBehavior</item>
         <item>5gDataIconBehavior</item>
         <item>hideCarrierLabel</item>
@@ -40,6 +41,9 @@
         <item name="Default">@string/default_text</item>
         <item name="LTE">@string/lte_4g</item>
         <item name="4GPlus">@string/four_g_plus_4g</item>
+    </string-array>
+    <string-array name="four_g_plus_data_icon_entries">
+        <item name="Default">@string/default_text</item>
         <item name="4.5G">@string/four_half_g_4g_plus</item>
         <item name="LTEPlus">@string/lte_plus_4g_plus</item>
     </string-array>
@@ -47,8 +51,11 @@
         <item name="Default">0</item>
         <item name="LTE">1</item>
         <item name="4GPlus">2</item>
-        <item name="4.5G">3</item>
-        <item name="LTEPlus">4</item>
+    </string-array>
+    <string-array name="four_g_plus_data_icon_values">
+        <item name="Default">0</item>
+        <item name="4.5G">1</item>
+        <item name="LTEPlus">2</item>
     </string-array>
     <string-array name="five_g_data_icon_entries">
         <item name="Default">@string/default_text</item>

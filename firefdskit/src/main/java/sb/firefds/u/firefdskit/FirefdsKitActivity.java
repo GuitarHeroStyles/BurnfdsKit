@@ -23,6 +23,7 @@ import static sb.firefds.u.firefdskit.utils.Constants.SHORTCUT_SECURITY;
 import static sb.firefds.u.firefdskit.utils.Constants.SHORTCUT_STATUSBAR;
 import static sb.firefds.u.firefdskit.utils.Constants.SHORTCUT_SYSTEM;
 import static sb.firefds.u.firefdskit.utils.Preferences.PREF_4G_DATA_ICON_BEHAVIOR;
+import static sb.firefds.u.firefdskit.utils.Preferences.PREF_4G_PLUS_DATA_ICON_BEHAVIOR;
 import static sb.firefds.u.firefdskit.utils.Preferences.PREF_5G_DATA_ICON_BEHAVIOR;
 import static sb.firefds.u.firefdskit.utils.Preferences.PREF_DISABLE_NUMBER_FORMATTING;
 import static sb.firefds.u.firefdskit.utils.Preferences.PREF_DISABLE_SMS_TO_MMS;
@@ -498,6 +499,14 @@ public class FirefdsKitActivity extends AppCompatActivity implements NavigationV
         } catch (ClassCastException e) {
             String uid = String.valueOf(preferences.getInt(PREF_4G_DATA_ICON_BEHAVIOR, 0));
             preferences.edit().putString(PREF_4G_DATA_ICON_BEHAVIOR, uid).apply();
+        }
+        // 4.5G / LTE+ used to be entries 3 and 4 of the 4G setting, they now have their own 4G+ setting
+        final String fourG = preferences.getString(PREF_4G_DATA_ICON_BEHAVIOR, "0");
+        if (fourG.equals("3") || fourG.equals("4")) {
+            preferences.edit()
+                       .putString(PREF_4G_PLUS_DATA_ICON_BEHAVIOR, fourG.equals("3") ? "1" : "2")
+                       .putString(PREF_4G_DATA_ICON_BEHAVIOR, "0")
+                       .apply();
         }
         try {
             preferences.getString(PREF_5G_DATA_ICON_BEHAVIOR, "0");

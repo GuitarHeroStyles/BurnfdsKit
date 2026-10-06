@@ -24,6 +24,7 @@ import static sb.firefds.u.firefdskit.Xposed.reloadAndGetBooleanPref;
 import static sb.firefds.u.firefdskit.Xposed.reloadAndGetStringPref;
 import static sb.firefds.u.firefdskit.utils.Packages.SYSTEM_UI;
 import static sb.firefds.u.firefdskit.utils.Preferences.PREF_4G_DATA_ICON_BEHAVIOR;
+import static sb.firefds.u.firefdskit.utils.Preferences.PREF_4G_PLUS_DATA_ICON_BEHAVIOR;
 import static sb.firefds.u.firefdskit.utils.Preferences.PREF_5G_DATA_ICON_BEHAVIOR;
 import static sb.firefds.u.firefdskit.utils.Preferences.PREF_CARRIER_SIZE;
 import static sb.firefds.u.firefdskit.utils.Preferences.PREF_HIDE_CARRIER_LABEL;
@@ -61,6 +62,7 @@ public class XSysUINotificationPanelPackage {
     private static final Map<String, Float> CARRIER_SIZES_MAP = new HashMap<>();
     private static final Map<String, Integer> CLOCK_SIZES_MAP = new HashMap<>();
     private static final Map<String, String> FOUR_G_DATA_ICONS_MAP = new HashMap<>();
+    private static final Map<String, String> FOUR_G_PLUS_DATA_ICONS_MAP = new HashMap<>();
     private static final Map<String, String> FIVE_G_DATA_ICONS_MAP = new HashMap<>();
 
     static {
@@ -81,8 +83,9 @@ public class XSysUINotificationPanelPackage {
         FOUR_G_DATA_ICONS_MAP.put("0", "DEFAULT");
         FOUR_G_DATA_ICONS_MAP.put("1", LTE);
         FOUR_G_DATA_ICONS_MAP.put("2", FOUR_G_PLUS);
-        FOUR_G_DATA_ICONS_MAP.put("3", FOUR_HALF_G);
-        FOUR_G_DATA_ICONS_MAP.put("4", LTE_PLUS);
+        FOUR_G_PLUS_DATA_ICONS_MAP.put("0", "DEFAULT");
+        FOUR_G_PLUS_DATA_ICONS_MAP.put("1", FOUR_HALF_G);
+        FOUR_G_PLUS_DATA_ICONS_MAP.put("2", LTE_PLUS);
         FIVE_G_DATA_ICONS_MAP.put("0", "DEFAULT");
         FIVE_G_DATA_ICONS_MAP.put("1", NR_5G_CONNECTED);
         FIVE_G_DATA_ICONS_MAP.put("2", NR_5G);
@@ -159,31 +162,39 @@ public class XSysUINotificationPanelPackage {
     }
 
     private static void set4gDataIcon(HashMap<String, Object> hashMap, Class<?> telephonyIconsClass) {
-        String behaviorIndex4g = reloadAndGetStringPref(PREF_4G_DATA_ICON_BEHAVIOR, "0");
-        String dataBehavior4g = FOUR_G_DATA_ICONS_MAP.get(behaviorIndex4g);
+        String dataBehavior4g = FOUR_G_DATA_ICONS_MAP.getOrDefault(reloadAndGetStringPref(PREF_4G_DATA_ICON_BEHAVIOR,
+                                                                                         "0"), "DEFAULT");
+        String dataBehavior4gPlus = FOUR_G_PLUS_DATA_ICONS_MAP.getOrDefault(reloadAndGetStringPref(
+                PREF_4G_PLUS_DATA_ICON_BEHAVIOR,
+                "0"), "DEFAULT");
         String NETWORK_TYPE_LTE = Integer.toString(TelephonyManager.NETWORK_TYPE_LTE);
+        // LTE with carrier aggregation, shown as 4G+
         String NETWORK_TYPE_LTE_PLUS = NETWORK_TYPE_LTE + "CA_Plus";
+        boolean plusIsDefault = dataBehavior4gPlus.equals("DEFAULT");
 
-        switch (Objects.requireNonNull(dataBehavior4g)) {
+        switch (dataBehavior4g) {
             case LTE:
-                Object lte = getStaticObjectField(telephonyIconsClass, LTE);
-                Object ltePlus = getStaticObjectField(telephonyIconsClass, LTE_PLUS);
-                hashMap.put(NETWORK_TYPE_LTE, lte);
-                hashMap.put(NETWORK_TYPE_LTE_PLUS, ltePlus);
+                hashMap.put(NETWORK_TYPE_LTE, getStaticObjectField(telephonyIconsClass, LTE));
+                if (plusIsDefault) {
+                    hashMap.put(NETWORK_TYPE_LTE_PLUS, getStaticObjectField(telephonyIconsClass, LTE_PLUS));
+                }
                 break;
             case FOUR_G_PLUS:
                 Object fourGPlus = getStaticObjectField(telephonyIconsClass, FOUR_G_PLUS);
                 hashMap.put(NETWORK_TYPE_LTE, fourGPlus);
-                hashMap.put(NETWORK_TYPE_LTE_PLUS, fourGPlus);
+                if (plusIsDefault) {
+                    hashMap.put(NETWORK_TYPE_LTE_PLUS, fourGPlus);
+                }
                 break;
+        }
+
+        // The 4G+ icon has its own setting, which wins over the 4G one
+        switch (dataBehavior4gPlus) {
             case FOUR_HALF_G:
-                Object fourHalfG = getStaticObjectField(telephonyIconsClass, FOUR_HALF_G);
-                hashMap.put(NETWORK_TYPE_LTE_PLUS, fourHalfG);
+                hashMap.put(NETWORK_TYPE_LTE_PLUS, getStaticObjectField(telephonyIconsClass, FOUR_HALF_G));
                 break;
             case LTE_PLUS:
-                // Only the carrier aggregation icon (4G+) becomes LTE+, plain 4G is left alone
-                Object lteOnlyPlus = getStaticObjectField(telephonyIconsClass, LTE_PLUS);
-                hashMap.put(NETWORK_TYPE_LTE_PLUS, lteOnlyPlus);
+                hashMap.put(NETWORK_TYPE_LTE_PLUS, getStaticObjectField(telephonyIconsClass, LTE_PLUS));
                 break;
         }
     }

@@ -105,6 +105,7 @@
     <string name="enable_camera_shutter_menu">Enable Shutter Sound Menu</string>
     <string name="enable_camera_shutter_menu_summary">Enable shutter sound menu in camera app</string>
     <string name="four_g_data_icon_behavior_title">4G Data Icon Symbol</string>
+    <string name="four_g_plus_data_icon_behavior_title">4G+ Data Icon Symbol</string>
     <string name="five_g_data_icon_behavior_title">5G Data Icon Symbol</string>
     <string name="lte_4g">LTE instead of 4G</string>
     <string name="four_g_plus_4g">4G+ instead of 4G</string>
