@@ -72,6 +72,24 @@ public class XPM34 {
             }
             log("FFK: hooked " + hooked + " restorePermissionState method(s) in " + PERMISSION_MANAGER_SERVICE);
 
+
+            // Probe + trigger: these are called constantly once the system runs, so use the first call to
+            // (re)grant permissions from a background thread, independent of restorePermissionState timing.
+            int probes = 0;
+            for (Method method : pmServiceClass.getDeclaredMethods()) {
+                final String name = method.getName();
+                if (name.equals("checkUidPermission") || name.equals("checkPermission")) {
+                    hookMethod(method, new XC_MethodHook() {
+                        @Override
+                        protected void beforeHookedMethod(MethodHookParam param) {
+                            startGrantThread(param.thisObject, classLoader);
+                        }
+                    });
+                    probes++;
+                }
+            }
+            log("FFK: hooked " + probes + " permission check probe method(s)");
+
             // restorePermissionState may run before the hook is installed (or not at all for unchanged
             // packages), so grant again once the system is ready.
             Method onSystemReady = pmServiceClass.getDeclaredMethod("onSystemReady");
@@ -124,6 +142,26 @@ public class XPM34 {
             log("FFK: failed to grant " + permission);
             log(e);
         }
+    }
+
+    private static boolean grantThreadStarted;
+
+    private static synchronized void startGrantThread(Object permissionManager, ClassLoader classLoader) {
+        if (grantThreadStarted) {
+            return;
+        }
+        grantThreadStarted = true;
+        log("FFK: permission check probe fired, starting grant thread");
+        new Thread(() -> {
+            for (int attempt = 0; attempt < 6; attempt++) {
+                try {
+                    Thread.sleep(attempt == 0 ? 20000 : 30000);
+                    grantAfterSystemReady(permissionManager, classLoader);
+                } catch (Throwable e) {
+                    log(e);
+                }
+            }
+        }, "FFK-grant").start();
     }
 
     private static void grantAfterSystemReady(Object permissionManager, ClassLoader classLoader) {
