@@ -24,6 +24,7 @@ public class Preferences {
     public static final String PREF_HIDE_VOLTE_ICON = "hideVolteIcon";
     public static final String PREF_SHOW_NETWORK_SPEED_MENU = "showNetworkSpeedMenu";
     public static final String PREF_4G_DATA_ICON_BEHAVIOR = "4gDataIconBehavior";
+    public static final String PREF_4G_PLUS_DATA_ICON_BEHAVIOR = "4gPlusDataIconBehavior";
     public static final String PREF_5G_DATA_ICON_BEHAVIOR = "5gDataIconBehavior";
     public static final String PREF_CLOCK_DATE_PREFERENCE = "clock_date_preference";
     public static final String PREF_CLOCK_DATE_ON_RIGHT = "clockDateOnRight";
