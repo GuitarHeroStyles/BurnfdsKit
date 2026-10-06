@@ -14,6 +14,8 @@
  */
 package sb.firefds.u.firefdskit;
 
+import android.app.StatusBarManager;
+
 import static sb.firefds.u.firefdskit.xposed.XposedBridge.log;
 import static sb.firefds.u.firefdskit.xposed.XposedHelpers.callMethod;
 import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findAndHookMethod;
@@ -28,6 +30,7 @@ import static sb.firefds.u.firefdskit.utils.Preferences.PREF_NFC_BEHAVIOR;
 
 import sb.firefds.u.firefdskit.xposed.XC_MethodHook;
 import sb.firefds.u.firefdskit.xposed.XC_MethodReplacement;
+import sb.firefds.u.firefdskit.xposed.XposedHelpers;
 
 @SuppressWarnings("SynchronizeOnNonFinalField")
 public class XNfcPackage {
@@ -50,6 +53,28 @@ public class XNfcPackage {
                     return null;
                 }
             });
+        } catch (XposedHelpers.ClassNotFoundError | NoSuchMethodError ignored) {
+            // NfcIcon no longer exists in One UI 8, the StatusBarManager hook below takes over
+        } catch (Throwable e) {
+            log(e);
+        }
+
+        try {
+            // The NFC service asks the status bar for its icon through StatusBarManager, whatever class does it
+            findAndHookMethod(StatusBarManager.class,
+                              "setIcon",
+                              String.class,
+                              int.class,
+                              int.class,
+                              String.class,
+                              new XC_MethodHook() {
+                                  @Override
+                                  protected void beforeHookedMethod(MethodHookParam param) {
+                                      if ("nfc".equals(param.args[0])) {
+                                          param.setResult(null);
+                                      }
+                                  }
+                              });
         } catch (Throwable e) {
             log(e);
         }
@@ -82,23 +107,27 @@ public class XNfcPackage {
                                                        getIntField(param.thisObject, "mScreenState"));
                             setIntField(param.thisObject, "mScreenState", SCREEN_STATE_ON_UNLOCKED);
                         }
-                    } catch (Exception e) {
+                    } catch (Throwable e) {
                         log(e);
                     }
                 }
 
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) {
-                    if (behavior.equals("0")) {
+                    if (behavior == null || behavior.equals("0")) {
                         return;
                     }
 
-                    final int mOrigScreenState = (Integer) getAdditionalInstanceField(param.thisObject,
-                                                                                      "mOrigScreenState");
-                    if (mOrigScreenState == -1) return;
+                    final Integer mOrigScreenState = (Integer) getAdditionalInstanceField(param.thisObject,
+                                                                                          "mOrigScreenState");
+                    if (mOrigScreenState == null || mOrigScreenState == -1) return;
 
-                    synchronized (param.thisObject) {
-                        setIntField(param.thisObject, "mScreenState", mOrigScreenState);
+                    try {
+                        synchronized (param.thisObject) {
+                            setIntField(param.thisObject, "mScreenState", mOrigScreenState);
+                        }
+                    } catch (Throwable e) {
+                        log(e);
                     }
                 }
             });
