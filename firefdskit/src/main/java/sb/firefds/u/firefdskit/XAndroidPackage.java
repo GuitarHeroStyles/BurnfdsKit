@@ -177,13 +177,21 @@ public class XAndroidPackage {
             }
         };
         boolean compareSignaturesHooked = false;
-        for (String methodName : new String[]{"compareSignatures", "compareSignatureArrays"}) {
+        // Verified against the One UI 8 services.jar: compareSignatures(SigningDetails, SigningDetails) and
+        // compareSignatureArrays(Signature[], Signature[]) exist, the old compareSignatures(Signature[], Signature[]) does not
+        final Object[][] candidates = {
+                {"compareSignatures", Signature[].class},
+                {"compareSignatureArrays", Signature[].class},
+                {"compareSignatures", SIGNING_DETAILS}
+        };
+        for (Object[] candidate : candidates) {
             try {
+                final Object parameterType = candidate[1];
                 findAndHookMethod(PACKAGE_MANAGER_SERVICE_UTILS,
                                   classLoader,
-                                  methodName,
-                                  Signature[].class,
-                                  Signature[].class,
+                                  (String) candidate[0],
+                                  parameterType,
+                                  parameterType,
                                   compareSignaturesHook);
                 compareSignaturesHooked = true;
             } catch (NoSuchMethodError ignored) {
