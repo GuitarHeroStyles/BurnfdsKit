@@ -234,9 +234,7 @@ public class XPM34 {
                                 try {
                                     log("FFK: " + className + "." + name + " fired, attempt " + outerProbeAttempts);
                                     if (outerProbeAttempts == 1) {
-                                        StringBuilder graph = new StringBuilder();
-                                        dumpGraph(param.thisObject, 0, "", graph, new java.util.IdentityHashMap<>());
-                                        logChunked("FFK: graph " + graph);
+                                        logChunked("FFK: fields " + dumpFields(param.thisObject));
                                     }
                                     Object impl = resolveImpl(param.thisObject, 0, new java.util.IdentityHashMap<>());
                                     log("FFK: resolved impl=" + (impl == null ? null : impl.getClass().getName()));
@@ -263,6 +261,28 @@ public class XPM34 {
         for (int i = 0; i < text.length(); i += 900) {
             log(text.substring(i, Math.min(text.length(), i + 900)));
         }
+    }
+
+    // One level, unfiltered: field name, declared type and actual value class
+    private static String dumpFields(Object o) throws IllegalAccessException {
+        StringBuilder out = new StringBuilder();
+        for (Class<?> c = o.getClass(); c != null && c != Object.class; c = c.getSuperclass()) {
+            out.append('<').append(c.getName()).append("> ");
+            for (java.lang.reflect.Field field : c.getDeclaredFields()) {
+                if (java.lang.reflect.Modifier.isStatic(field.getModifiers()) || field.getType().isPrimitive()) {
+                    continue;
+                }
+                field.setAccessible(true);
+                Object value = field.get(o);
+                out.append(field.getName())
+                   .append(':')
+                   .append(field.getType().getSimpleName())
+                   .append('=')
+                   .append(value == null ? "null" : value.getClass().getName())
+                   .append("; ");
+            }
+        }
+        return out.toString();
     }
 
     private static void dumpGraph(Object o,
@@ -309,7 +329,7 @@ public class XPM34 {
                 }
                 field.setAccessible(true);
                 Object value = field.get(o);
-                if (value != null && value.getClass().getName().startsWith("com.android.server.pm")) {
+                if (value != null && value.getClass().getName().contains("ermission")) {
                     Object found = resolveImpl(value, depth + 1, visited);
                     if (found != null) {
                         return found;
