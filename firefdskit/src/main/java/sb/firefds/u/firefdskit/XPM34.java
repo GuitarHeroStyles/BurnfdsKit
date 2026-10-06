@@ -150,6 +150,7 @@ public class XPM34 {
     }
 
     private static boolean grantThreadStarted;
+    private static int outerProbeAttempts;
 
     private static synchronized void startGrantThread(Object permissionManager, ClassLoader classLoader) {
         if (grantThreadStarted) {
@@ -205,7 +206,7 @@ public class XPM34 {
                         }
                     }
                 }
-                log("FFK: permission classes: " + sb);
+                logChunked("FFK: permission classes: " + sb);
             } catch (Throwable e) {
                 log("FFK: cannot list permission classes");
                 log(e);
@@ -226,9 +227,19 @@ public class XPM34 {
                         hookMethod(method, new XC_MethodHook() {
                             @Override
                             protected void beforeHookedMethod(MethodHookParam param) {
+                                if (grantThreadStarted || outerProbeAttempts >= 5) {
+                                    return;
+                                }
+                                outerProbeAttempts++;
                                 try {
-                                    Object impl = resolveImpl(param.thisObject, 0);
-                                    log("FFK: " + className + "." + name + " fired, impl=" + impl);
+                                    log("FFK: " + className + "." + name + " fired, attempt " + outerProbeAttempts);
+                                    if (outerProbeAttempts == 1) {
+                                        StringBuilder graph = new StringBuilder();
+                                        dumpGraph(param.thisObject, 0, "", graph, new java.util.IdentityHashMap<>());
+                                        logChunked("FFK: graph " + graph);
+                                    }
+                                    Object impl = resolveImpl(param.thisObject, 0, new java.util.IdentityHashMap<>());
+                                    log("FFK: resolved impl=" + (impl == null ? null : impl.getClass().getName()));
                                     if (impl != null) {
                                         startGrantThread(impl, classLoader);
                                     }
@@ -248,13 +259,48 @@ public class XPM34 {
         }
     }
 
-    // Walk object fields (outer service, decorators, internal impl) until the real implementation is found
-    private static Object resolveImpl(Object o, int depth) throws IllegalAccessException {
-        if (o == null || depth > 4) {
+    private static void logChunked(String text) {
+        for (int i = 0; i < text.length(); i += 900) {
+            log(text.substring(i, Math.min(text.length(), i + 900)));
+        }
+    }
+
+    private static void dumpGraph(Object o,
+                                  int depth,
+                                  String prefix,
+                                  StringBuilder out,
+                                  java.util.Map<Object, Boolean> visited) throws IllegalAccessException {
+        if (o == null || depth > 3 || visited.put(o, true) != null) {
+            return;
+        }
+        out.append(prefix).append('<').append(o.getClass().getName()).append("> ");
+        for (Class<?> c = o.getClass(); c != null && c != Object.class; c = c.getSuperclass()) {
+            for (java.lang.reflect.Field field : c.getDeclaredFields()) {
+                if (java.lang.reflect.Modifier.isStatic(field.getModifiers()) || field.getType().isPrimitive()) {
+                    continue;
+                }
+                field.setAccessible(true);
+                Object value = field.get(o);
+                if (value != null && value.getClass().getName().startsWith("com.android.server.pm")) {
+                    out.append(field.getName()).append('=').append(value.getClass().getSimpleName()).append(' ');
+                    dumpGraph(value, depth + 1, "[" + field.getName() + "] ", out, visited);
+                }
+            }
+        }
+    }
+
+    // Walk object fields until the object that owns the permission registry (the real implementation) is found
+    private static Object resolveImpl(Object o, int depth, java.util.Map<Object, Boolean> visited)
+            throws IllegalAccessException {
+        if (o == null || depth > 5 || visited.put(o, true) != null) {
             return null;
         }
-        if (o.getClass().getName().equals(PERMISSION_MANAGER_SERVICE)) {
-            return o;
+        for (Class<?> c = o.getClass(); c != null && c != Object.class; c = c.getSuperclass()) {
+            for (java.lang.reflect.Field field : c.getDeclaredFields()) {
+                if (field.getName().equals("mRegistry")) {
+                    return o;
+                }
+            }
         }
         for (Class<?> c = o.getClass(); c != null && c != Object.class; c = c.getSuperclass()) {
             for (java.lang.reflect.Field field : c.getDeclaredFields()) {
@@ -263,8 +309,8 @@ public class XPM34 {
                 }
                 field.setAccessible(true);
                 Object value = field.get(o);
-                if (value != null && value != o && value.getClass().getName().startsWith(PERMISSION + ".")) {
-                    Object found = resolveImpl(value, depth + 1);
+                if (value != null && value.getClass().getName().startsWith("com.android.server.pm")) {
+                    Object found = resolveImpl(value, depth + 1, visited);
                     if (found != null) {
                         return found;
                     }
