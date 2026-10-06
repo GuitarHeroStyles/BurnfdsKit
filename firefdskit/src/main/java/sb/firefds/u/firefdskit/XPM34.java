@@ -17,6 +17,7 @@ package sb.firefds.u.firefdskit;
 import static de.robv.android.xposed.XposedBridge.hookMethod;
 import static de.robv.android.xposed.XposedBridge.log;
 import static de.robv.android.xposed.XposedHelpers.callMethod;
+import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
 import static sb.firefds.u.firefdskit.utils.Packages.FIREFDSKIT;
@@ -56,13 +57,23 @@ public class XPM34 {
                                                                                        RECOVERY,
                                                                                        ACCESS_SCREEN_RECORDER_SVC));
 
+    private static final String PERMISSION_SERVICE = ACCESS_PERMISSION + ".PermissionService";
+    private static final int PERMISSION_GRANTED = 0;
+
     private static final Set<String> LOGGED = new HashSet<>();
+    private static volatile int firefdsAppId = -1;
 
     public static void doHook(ClassLoader classLoader) {
         try {
             hookAccessPolicy(classLoader);
         } catch (Throwable e) {
             log("FFK: cannot hook the new permission service");
+            log(e);
+        }
+        try {
+            hookPermissionService(classLoader);
+        } catch (Throwable e) {
+            log("FFK: cannot hook PermissionService");
             log(e);
         }
         try {
@@ -104,6 +115,73 @@ public class XPM34 {
             }
         }
         log("FFK: hooked " + hooked + " shouldGrantPermissionBySignature method(s) in " + APP_ID_PERMISSION_POLICY);
+    }
+
+    private static void hookPermissionService(ClassLoader classLoader) {
+        final Class<?> service = findClass(PERMISSION_SERVICE, classLoader);
+        int hooked = 0;
+        for (Method method : service.getDeclaredMethods()) {
+            final String name = method.getName();
+            if (!name.equals("checkUidPermission") && !name.equals("checkPermission")) {
+                continue;
+            }
+            hookMethod(method, new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) {
+                    try {
+                        if (shouldGrant(param.args, classLoader)) {
+                            param.setResult(PERMISSION_GRANTED);
+                        }
+                    } catch (Throwable e) {
+                        log(e);
+                    }
+                }
+            });
+            hooked++;
+        }
+        log("FFK: hooked " + hooked + " check method(s) in " + PERMISSION_SERVICE);
+    }
+
+    // checkUidPermission(int uid, String permission, ...) or checkPermission(String pkg, String permission, ...)
+    private static boolean shouldGrant(Object[] args, ClassLoader classLoader) {
+        if (args.length < 2 || !(args[1] instanceof String) || !GRANTED_PERMISSIONS.contains(args[1])) {
+            return false;
+        }
+        final String permission = (String) args[1];
+        boolean isFirefds;
+        if (args[0] instanceof String) {
+            isFirefds = FIREFDSKIT.equals(args[0]);
+        } else if (args[0] instanceof Integer) {
+            isFirefds = isFirefdsUid((Integer) args[0], classLoader);
+        } else {
+            return false;
+        }
+        if (isFirefds && LOGGED.add(permission)) {
+            log("FFK: granting " + permission + " to " + FIREFDSKIT);
+        }
+        return isFirefds;
+    }
+
+    private static boolean isFirefdsUid(int uid, ClassLoader classLoader) {
+        if (firefdsAppId < 0) {
+            try {
+                final Class<?> localServices = findClass("com.android.server.LocalServices", classLoader);
+                final Class<?> pmInternal = findClass("com.android.server.pm.PackageManagerInternal", classLoader);
+                final Object pmi = callStaticMethod(localServices, "getService", pmInternal);
+                if (pmi == null) {
+                    return false;
+                }
+                final int packageUid = (int) callMethod(pmi, "getPackageUid", FIREFDSKIT, 0L, 0);
+                if (packageUid < 0) {
+                    return false;
+                }
+                firefdsAppId = packageUid % 100000;
+                log("FFK: Firefds Kit appId=" + firefdsAppId);
+            } catch (Throwable e) {
+                return false;
+            }
+        }
+        return uid % 100000 == firefdsAppId;
     }
 
     private static void hookLegacyService(ClassLoader classLoader) {
