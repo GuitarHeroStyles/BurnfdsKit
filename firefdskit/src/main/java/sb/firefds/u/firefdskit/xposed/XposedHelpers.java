@@ -29,10 +29,19 @@ public final class XposedHelpers {
     // ---------------------------------------------------------------- classes
 
     public static Class<?> findClass(String className, ClassLoader classLoader) {
-        try {
-            return Class.forName(className, false, classLoader == null ? ClassLoader.getSystemClassLoader() : classLoader);
-        } catch (ClassNotFoundException e) {
-            throw new ClassNotFoundError(className, e);
+        final ClassLoader loader = classLoader == null ? ClassLoader.getSystemClassLoader() : classLoader;
+        // Like the legacy helper, accept nested classes written with dots (Outer.Inner) by retrying with '$'
+        String candidate = className;
+        while (true) {
+            try {
+                return Class.forName(candidate, false, loader);
+            } catch (ClassNotFoundException e) {
+                final int lastDot = candidate.lastIndexOf('.');
+                if (lastDot < 0) {
+                    throw new ClassNotFoundError(className, e);
+                }
+                candidate = candidate.substring(0, lastDot) + '$' + candidate.substring(lastDot + 1);
+            }
         }
     }
 

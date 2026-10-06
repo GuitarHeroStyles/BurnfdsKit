@@ -200,7 +200,7 @@ public class FirefdsKitActivity extends AppCompatActivity implements NavigationV
             editor.putInt(PREF_SCREEN_TIMEOUT_SECONDS, seconds).apply();
         }
 
-        if (!XposedChecker.isActive()) {
+        if (!XposedChecker.isActive() && !RemotePreferencesSync.isConnected()) {
             setCardStatus(R.drawable.ic_error, R.string.firefds_kit_is_not_active, R.color.error);
         } else {
             if (permissionDeniedList.size() > 0) {
