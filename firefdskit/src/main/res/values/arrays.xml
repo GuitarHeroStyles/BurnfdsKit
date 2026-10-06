@@ -41,17 +41,19 @@
         <item name="LTE">@string/lte_4g</item>
         <item name="4GPlus">@string/four_g_plus_4g</item>
         <item name="4.5G">@string/four_half_g_4g_plus</item>
+        <item name="LTEPlus">@string/lte_plus_4g_plus</item>
     </string-array>
     <string-array name="four_g_data_icon_values">
         <item name="Default">0</item>
         <item name="LTE">1</item>
         <item name="4GPlus">2</item>
         <item name="4.5G">3</item>
+        <item name="LTEPlus">4</item>
     </string-array>
     <string-array name="five_g_data_icon_entries">
         <item name="Default">@string/default_text</item>
         <item name="5G">@string/five_g_one</item>
-        <item name="5GOneShaped">@string/five_g_one</item>
+        <item name="5GOneShaped">@string/five_g</item>
         <item name="5GPlusIcon">@string/five_g_plus</item>
     </string-array>
     <string-array name="five_g_data_icon_values">

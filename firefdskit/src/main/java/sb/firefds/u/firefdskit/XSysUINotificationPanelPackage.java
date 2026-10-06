@@ -82,6 +82,7 @@ public class XSysUINotificationPanelPackage {
         FOUR_G_DATA_ICONS_MAP.put("1", LTE);
         FOUR_G_DATA_ICONS_MAP.put("2", FOUR_G_PLUS);
         FOUR_G_DATA_ICONS_MAP.put("3", FOUR_HALF_G);
+        FOUR_G_DATA_ICONS_MAP.put("4", LTE_PLUS);
         FIVE_G_DATA_ICONS_MAP.put("0", "DEFAULT");
         FIVE_G_DATA_ICONS_MAP.put("1", NR_5G_CONNECTED);
         FIVE_G_DATA_ICONS_MAP.put("2", NR_5G);
@@ -178,6 +179,11 @@ public class XSysUINotificationPanelPackage {
             case FOUR_HALF_G:
                 Object fourHalfG = getStaticObjectField(telephonyIconsClass, FOUR_HALF_G);
                 hashMap.put(NETWORK_TYPE_LTE_PLUS, fourHalfG);
+                break;
+            case LTE_PLUS:
+                // Only the carrier aggregation icon (4G+) becomes LTE+, plain 4G is left alone
+                Object lteOnlyPlus = getStaticObjectField(telephonyIconsClass, LTE_PLUS);
+                hashMap.put(NETWORK_TYPE_LTE_PLUS, lteOnlyPlus);
                 break;
         }
     }
