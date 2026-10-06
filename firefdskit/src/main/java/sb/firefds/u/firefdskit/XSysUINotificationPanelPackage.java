@@ -163,19 +163,12 @@ public class XSysUINotificationPanelPackage {
         }
     }
 
-    private static boolean iconMapLogged;
-
     private static void set4gDataIcon(HashMap<String, Object> hashMap, Class<?> telephonyIconsClass) {
         String behavior4g = reloadAndGetStringPref(PREF_4G_DATA_ICON_BEHAVIOR, "0");
         String behavior4gPlus = reloadAndGetStringPref(PREF_4G_PLUS_DATA_ICON_BEHAVIOR, "0");
         String dataBehavior4g = FOUR_G_DATA_ICONS_MAP.getOrDefault(behavior4g, "DEFAULT");
         String dataBehavior4gPlus = FOUR_G_PLUS_DATA_ICONS_MAP.getOrDefault(behavior4gPlus, "DEFAULT");
         String NETWORK_TYPE_LTE = Integer.toString(TelephonyManager.NETWORK_TYPE_LTE);
-
-        if (!iconMapLogged) {
-            iconMapLogged = true;
-            log("FFK: mobile icon map keys=" + hashMap.keySet() + " 4g=" + behavior4g + " 4g+=" + behavior4gPlus);
-        }
 
         // LTE with carrier aggregation (shown as 4G+). The key spelling differs between releases
         // (13CA_Plus, 13_CA_Plus, 13_CA...), so every LTE key that is not the plain one is treated as such.
