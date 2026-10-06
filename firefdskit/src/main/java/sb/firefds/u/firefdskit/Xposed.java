@@ -15,7 +15,6 @@
 package sb.firefds.u.firefdskit;
 
 import static sb.firefds.u.firefdskit.utils.Packages.FIREFDSKIT;
-import static sb.firefds.u.firefdskit.xposed.XposedBridge.log;
 import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findAndHookMethod;
 
 import android.content.SharedPreferences;
@@ -50,10 +49,10 @@ public class Xposed extends XposedModule {
         XposedBridge.init(this);
         try {
             prefs = getRemotePreferences(PREF_GROUP);
-            log("FFK: Firefds Kit remote preferences ready in " + param.getProcessName());
+            XposedBridge.log("FFK: Firefds Kit remote preferences ready in " + param.getProcessName());
         } catch (Throwable e) {
-            log("FFK: cannot open remote preferences");
-            log(e);
+            XposedBridge.log("FFK: cannot open remote preferences");
+            XposedBridge.log(e);
         }
     }
 
@@ -68,13 +67,13 @@ public class Xposed extends XposedModule {
         try {
             XPM34.doHook(classLoader);
         } catch (Throwable e) {
-            log(e);
+            XposedBridge.log(e);
         }
 
         try {
             XAndroidPackage.doHook(classLoader);
         } catch (Throwable e) {
-            log(e);
+            XposedBridge.log(e);
         }
     }
 
@@ -96,7 +95,7 @@ public class Xposed extends XposedModule {
                                   "isActive",
                                   XC_MethodReplacement.returnConstant(Boolean.TRUE));
             } catch (Throwable e) {
-                log(e);
+                XposedBridge.log(e);
             }
         }
 
@@ -107,35 +106,35 @@ public class Xposed extends XposedModule {
         hookSystemWide();
 
         if (packageName.equals(Packages.NFC)) {
-            hook("NFC", () -> XNfcPackage.doHook(classLoader));
+            safeHook("NFC", () -> XNfcPackage.doHook(classLoader));
         } else if (packageName.equals(Packages.SYSTEM_UI)) {
-            hook("SystemUI", () -> XSysUIPackage.doHook(prefs, classLoader));
+            safeHook("SystemUI", () -> XSysUIPackage.doHook(prefs, classLoader));
         } else if (packageName.equals(Packages.SETTINGS)) {
-            hook("Settings", () -> XSecSettingsPackage.doHook(classLoader));
+            safeHook("Settings", () -> XSecSettingsPackage.doHook(classLoader));
         } else if (packageName.equals(Packages.EMAIL)) {
-            hook("Email", () -> XSecEmailPackage.doHook(classLoader));
+            safeHook("Email", () -> XSecEmailPackage.doHook(classLoader));
         } else if (packageName.equals(Packages.CAMERA)) {
-            hook("Camera", () -> XSecCameraPackage.doHook(classLoader));
+            safeHook("Camera", () -> XSecCameraPackage.doHook(classLoader));
         } else if (packageName.equals(Packages.MTP_APPLICATION)) {
-            hook("MTP", () -> XMtpApplication.doHook(classLoader));
+            safeHook("MTP", () -> XMtpApplication.doHook(classLoader));
         } else if (packageName.equals(Packages.FOTA_AGENT)) {
-            hook("FOTA", () -> XFotaAgentPackage.doHook(classLoader));
+            safeHook("FOTA", () -> XFotaAgentPackage.doHook(classLoader));
         } else if (packageName.equals(Packages.SAMSUNG_MESSAGING)) {
-            hook("Messaging", () -> XMessagingPackage.doHook(classLoader));
+            safeHook("Messaging", () -> XMessagingPackage.doHook(classLoader));
         } else if (packageName.equals(Packages.SAMSUNG_CONTACTS)) {
-            hook("Contacts", () -> XContactsPackage.doHook(classLoader));
+            safeHook("Contacts", () -> XContactsPackage.doHook(classLoader));
         } else if (packageName.equals(Packages.SMART_CAPTURE)) {
-            hook("SmartCapture", () -> XSmartCapturePackage.doHook(classLoader));
+            safeHook("SmartCapture", () -> XSmartCapturePackage.doHook(classLoader));
         }
     }
 
     private static boolean isSupported() {
         if (Utils.isNotSamsungRom()) {
-            log("FFK: com.samsung.device.jar or com.samsung.device.lite.jar not found!");
+            XposedBridge.log("FFK: com.samsung.device.jar or com.samsung.device.lite.jar not found!");
             return false;
         }
         if (prefs == null) {
-            log("FFK: Xposed cannot read Firefds Kit preferences!");
+            XposedBridge.log("FFK: Xposed cannot read Firefds Kit preferences!");
             return false;
         }
         return true;
@@ -146,19 +145,19 @@ public class Xposed extends XposedModule {
             return;
         }
         systemWideHooked = true;
-        hook("system wide", XSystemWide::doHook);
+        safeHook("system wide", XSystemWide::doHook);
     }
 
     private interface HookAction {
         void run() throws Throwable;
     }
 
-    private static void hook(String name, HookAction action) {
+    private static void safeHook(String name, HookAction action) {
         try {
             action.run();
         } catch (Throwable e) {
-            log("FFK: hooks for " + name + " failed");
-            log(e);
+            XposedBridge.log("FFK: hooks for " + name + " failed");
+            XposedBridge.log(e);
         }
     }
 

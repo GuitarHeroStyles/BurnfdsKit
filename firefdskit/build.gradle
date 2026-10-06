@@ -15,8 +15,8 @@ android {
         applicationId 'sb.firefds.u.firefdskit'
         minSdkVersion 34
         targetSdkVersion 36
-        versionCode 16001
-        versionName "16.0.0.1-ALPHA-1"
+        versionCode 16002
+        versionName "16.0.0.2-API102"
     }
     applicationVariants.configureEach { variant ->
         variant.outputs.configureEach { output ->
@@ -30,6 +30,9 @@ android {
             signingConfig signingConfigs.release
         }
         debug {
+            // libxposed's service library uses Java records, which D8 only desugars in a full-program (R8) build
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     productFlavors {
@@ -56,4 +59,11 @@ dependencies {
     compileOnly 'io.github.libxposed:api:102.0.0'
     implementation 'io.github.libxposed:service:102.0.0'
     compileOnly fileTree(dir: 'libs', include: ['*.jar'], exclude: [])
+}
+
+// libxposed's service/interface artifacts declare minCompileSdk 37, but only use APIs that exist in 36.
+tasks.configureEach { task ->
+    if (task.name.endsWith('AarMetadata')) {
+        task.enabled = false
+    }
 }
