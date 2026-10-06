@@ -62,6 +62,8 @@ public class XPM34 {
 
     private static final Set<String> LOGGED = new HashSet<>();
     private static volatile int firefdsAppId = -1;
+    private static int diagnosticLogs;
+    private static int failureLogs;
 
     public static void doHook(ClassLoader classLoader) {
         try {
@@ -148,6 +150,10 @@ public class XPM34 {
             return false;
         }
         final String permission = (String) args[1];
+        if (diagnosticLogs < 6) {
+            diagnosticLogs++;
+            log("FFK: check " + permission + " arg0=" + args[0] + " (" + args[0].getClass().getSimpleName() + ")");
+        }
         boolean isFirefds;
         if (args[0] instanceof String) {
             isFirefds = FIREFDSKIT.equals(args[0]);
@@ -164,24 +170,45 @@ public class XPM34 {
 
     private static boolean isFirefdsUid(int uid, ClassLoader classLoader) {
         if (firefdsAppId < 0) {
+            Object pmi = null;
             try {
                 final Class<?> localServices = findClass("com.android.server.LocalServices", classLoader);
                 final Class<?> pmInternal = findClass("com.android.server.pm.PackageManagerInternal", classLoader);
-                final Object pmi = callStaticMethod(localServices, "getService", pmInternal);
-                if (pmi == null) {
-                    return false;
-                }
-                final int packageUid = (int) callMethod(pmi, "getPackageUid", FIREFDSKIT, 0L, 0);
-                if (packageUid < 0) {
-                    return false;
-                }
-                firefdsAppId = packageUid % 100000;
-                log("FFK: Firefds Kit appId=" + firefdsAppId);
+                pmi = callStaticMethod(localServices, "getService", pmInternal);
             } catch (Throwable e) {
+                logFailure("cannot get PackageManagerInternal", e);
                 return false;
             }
+            if (pmi == null) {
+                return false;
+            }
+            int packageUid = -1;
+            try {
+                packageUid = (int) callMethod(pmi, "getPackageUid", FIREFDSKIT, 0L, 0);
+            } catch (Throwable e) {
+                logFailure("getPackageUid failed", e);
+                try {
+                    final Object pkg = callMethod(pmi, "getPackage", FIREFDSKIT);
+                    if (pkg != null) {
+                        packageUid = (int) callMethod(pkg, "getUid");
+                    }
+                } catch (Throwable e2) {
+                    logFailure("getPackage failed", e2);
+                }
+            }
+            if (packageUid < 0) {
+                return false;
+            }
+            firefdsAppId = packageUid % 100000;
+            log("FFK: Firefds Kit appId=" + firefdsAppId);
         }
         return uid % 100000 == firefdsAppId;
+    }
+
+    private static void logFailure(String what, Throwable e) {
+        if (failureLogs++ < 4) {
+            log("FFK: " + what + ": " + e);
+        }
     }
 
     private static void hookLegacyService(ClassLoader classLoader) {
