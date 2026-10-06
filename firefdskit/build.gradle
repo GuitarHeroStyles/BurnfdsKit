@@ -53,6 +53,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.material:material:1.11.0'
-    compileOnly 'de.robv.android.xposed:api:82'
+    compileOnly 'io.github.libxposed:api:102.0.0'
+    implementation 'io.github.libxposed:service:102.0.0'
     compileOnly fileTree(dir: 'libs', include: ['*.jar'], exclude: [])
 }

@@ -14,12 +14,12 @@
  */
 package sb.firefds.u.firefdskit;
 
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
-import static de.robv.android.xposed.XposedBridge.log;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.setBooleanField;
-import static de.robv.android.xposed.XposedHelpers.setIntField;
+import static sb.firefds.u.firefdskit.xposed.XposedBridge.hookAllConstructors;
+import static sb.firefds.u.firefdskit.xposed.XposedBridge.log;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findAndHookMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findClass;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.setBooleanField;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.setIntField;
 import static sb.firefds.u.firefdskit.Xposed.reloadAndGetBooleanPref;
 import static sb.firefds.u.firefdskit.utils.Preferences.PREF_DISABLE_EXCHANGE_SECURITY;
 
@@ -27,9 +27,9 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
-import de.robv.android.xposed.XC_MethodReplacement;
+import sb.firefds.u.firefdskit.xposed.XC_MethodHook;
+import sb.firefds.u.firefdskit.xposed.XC_MethodHook.MethodHookParam;
+import sb.firefds.u.firefdskit.xposed.XC_MethodReplacement;
 import sb.firefds.u.firefdskit.utils.Packages;
 
 public class XSecEmailPackage {

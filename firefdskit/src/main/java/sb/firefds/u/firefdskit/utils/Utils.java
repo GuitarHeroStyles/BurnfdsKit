@@ -14,8 +14,8 @@
  */
 package sb.firefds.u.firefdskit.utils;
 
-import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.callStaticMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findClass;
 import static sb.firefds.u.firefdskit.utils.Constants.TAG;
 import static sb.firefds.u.firefdskit.utils.Packages.FIREFDSKIT;
 import static sb.firefds.u.firefdskit.utils.Preferences.PREF_FORCE_ENGLISH;

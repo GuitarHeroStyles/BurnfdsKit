@@ -14,12 +14,12 @@
  */
 package sb.firefds.u.firefdskit;
 
-import static de.robv.android.xposed.XposedBridge.hookMethod;
-import static de.robv.android.xposed.XposedBridge.log;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static sb.firefds.u.firefdskit.xposed.XposedBridge.hookMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedBridge.log;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.callMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.callStaticMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findClass;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.getObjectField;
 import static sb.firefds.u.firefdskit.utils.Packages.FIREFDSKIT;
 
 import java.lang.reflect.Method;
@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.robv.android.xposed.XC_MethodHook;
+import sb.firefds.u.firefdskit.xposed.XC_MethodHook;
 
 /**
  * Grants the system permissions Firefds Kit needs.

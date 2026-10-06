@@ -94,6 +94,7 @@ import sb.firefds.u.firefdskit.dialogs.SaveDialog;
 import sb.firefds.u.firefdskit.fragments.FirefdsPreferenceFragment;
 import sb.firefds.u.firefdskit.fragments.PreferenceFragmentFactory;
 import sb.firefds.u.firefdskit.notifications.RebootNotification;
+import sb.firefds.u.firefdskit.utils.RemotePreferencesSync;
 import sb.firefds.u.firefdskit.utils.Utils;
 
 public class FirefdsKitActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, RestoreDialog.RestoreDialogListener, PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
@@ -137,6 +138,7 @@ public class FirefdsKitActivity extends AppCompatActivity implements NavigationV
         super.onCreate(savedInstanceState);
         appContext = isDeviceEncrypted() ? createDeviceProtectedStorageContext() : this;
         sharedPreferences = getPrefs(appContext);
+        RemotePreferencesSync.start(sharedPreferences);
         activity = this;
 
         List<String> permissionDeniedList = checkPermissions();

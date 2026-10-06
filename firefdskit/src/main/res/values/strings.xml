@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Firefds Kit [Baklava]</string>
+    <string name="module_description">Made for stock Samsung devices supporting Android 14 - 16 Roms by Firefds</string>
     <string name="samsung_rom_warning">Samsung ROM required</string>
     <string name="samsung_rom_warning_msg">Your ROM doesn\'t seem to be a Samsung ROM\nThis application doesn\'t support CM or AOSP ROMs.</string>
     <string name="disable_loud_volume_enabled">Loud volume warning is enabled</string>

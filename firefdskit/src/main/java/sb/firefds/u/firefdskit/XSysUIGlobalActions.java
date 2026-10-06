@@ -14,12 +14,12 @@
  */
 package sb.firefds.u.firefdskit;
 
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
-import static de.robv.android.xposed.XposedBridge.log;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
+import static sb.firefds.u.firefdskit.xposed.XposedBridge.hookAllConstructors;
+import static sb.firefds.u.firefdskit.xposed.XposedBridge.log;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.callMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findAndHookMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findClass;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.getObjectField;
 import static sb.firefds.u.firefdskit.Xposed.reloadAndGetBooleanPref;
 import static sb.firefds.u.firefdskit.Xposed.reloadAndGetStringPref;
 import static sb.firefds.u.firefdskit.actionViewModels.FirefdsKitActionViewModelsFactory.getActionViewModel;
@@ -78,9 +78,9 @@ import com.samsung.android.globalactions.util.UtilFactory;
 import java.lang.ref.WeakReference;
 import java.util.Optional;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XC_MethodReplacement;
-import de.robv.android.xposed.XSharedPreferences;
+import sb.firefds.u.firefdskit.xposed.XC_MethodHook;
+import sb.firefds.u.firefdskit.xposed.XC_MethodReplacement;
+import android.content.SharedPreferences;
 import sb.firefds.u.firefdskit.actionViewModels.ActionViewModelDefaults;
 import sb.firefds.u.firefdskit.utils.Utils;
 
@@ -120,7 +120,7 @@ public class XSysUIGlobalActions {
     private static Object mFlashlightObject;
     private static Resources resources;
 
-    public static void doHook(@NonNull XSharedPreferences prefs, ClassLoader classLoader) {
+    public static void doHook(@NonNull SharedPreferences prefs, ClassLoader classLoader) {
 
         final Class<?> flashlightControllerImplClass = findClass(FLASHLIGHT_CONTROLLER_IMPL_CLASS, classLoader);
 

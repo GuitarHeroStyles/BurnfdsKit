@@ -14,20 +14,20 @@
  */
 package sb.firefds.u.firefdskit;
 
-import static de.robv.android.xposed.XposedBridge.log;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField;
-import static de.robv.android.xposed.XposedHelpers.getIntField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
-import static de.robv.android.xposed.XposedHelpers.setIntField;
+import static sb.firefds.u.firefdskit.xposed.XposedBridge.log;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.callMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findAndHookMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.getAdditionalInstanceField;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.getIntField;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.getObjectField;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.setAdditionalInstanceField;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.setIntField;
 import static sb.firefds.u.firefdskit.Xposed.reloadAndGetStringPref;
 import static sb.firefds.u.firefdskit.utils.Packages.NFC;
 import static sb.firefds.u.firefdskit.utils.Preferences.PREF_NFC_BEHAVIOR;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XC_MethodReplacement;
+import sb.firefds.u.firefdskit.xposed.XC_MethodHook;
+import sb.firefds.u.firefdskit.xposed.XC_MethodReplacement;
 
 @SuppressWarnings("SynchronizeOnNonFinalField")
 public class XNfcPackage {

@@ -14,8 +14,8 @@
  */
 package sb.firefds.u.firefdskit.actionViewModels;
 
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.callMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.callStaticMethod;
 import static sb.firefds.u.firefdskit.XSysUIGlobalActions.getResources;
 import static sb.firefds.u.firefdskit.utils.Constants.SCREENSHOT_ACTION;
 

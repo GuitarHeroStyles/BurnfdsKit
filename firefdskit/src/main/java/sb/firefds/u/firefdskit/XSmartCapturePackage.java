@@ -14,16 +14,16 @@
  */
 package sb.firefds.u.firefdskit;
 
-import static de.robv.android.xposed.XposedBridge.log;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
+import static sb.firefds.u.firefdskit.xposed.XposedBridge.log;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findAndHookMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findClass;
 import static sb.firefds.u.firefdskit.Xposed.reloadAndGetBooleanPref;
 import static sb.firefds.u.firefdskit.utils.Preferences.PREF_ENABLE_SCREEN_RECORDER_IN_CALL;
 
 import android.content.Context;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XC_MethodReplacement;
+import sb.firefds.u.firefdskit.xposed.XC_MethodHook;
+import sb.firefds.u.firefdskit.xposed.XC_MethodReplacement;
 
 public class XSmartCapturePackage {
 

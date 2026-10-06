@@ -14,14 +14,14 @@
  */
 package sb.firefds.u.firefdskit;
 
-import static de.robv.android.xposed.XposedBridge.log;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedBridge.log;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.callMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findAndHookMethod;
 import static sb.firefds.u.firefdskit.Xposed.reloadAndGetBooleanPref;
 import static sb.firefds.u.firefdskit.utils.Preferences.PREF_DISABLE_TEMPERATURE_CHECKS;
 import static sb.firefds.u.firefdskit.utils.Preferences.PREF_ENABLE_CAMERA_SHUTTER_MENU;
 
-import de.robv.android.xposed.XC_MethodHook;
+import sb.firefds.u.firefdskit.xposed.XC_MethodHook;
 
 public class XSecCameraPackage {
 

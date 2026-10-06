@@ -14,19 +14,19 @@
  */
 package sb.firefds.u.firefdskit;
 
-import static de.robv.android.xposed.XposedBridge.hookAllConstructors;
-import static de.robv.android.xposed.XposedBridge.hookMethod;
-import static de.robv.android.xposed.XposedBridge.log;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
-import static de.robv.android.xposed.XposedHelpers.findAndHookConstructor;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.findMethodBestMatch;
-import static de.robv.android.xposed.XposedHelpers.findMethodExact;
-import static de.robv.android.xposed.XposedHelpers.getBooleanField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.setObjectField;
+import static sb.firefds.u.firefdskit.xposed.XposedBridge.hookAllConstructors;
+import static sb.firefds.u.firefdskit.xposed.XposedBridge.hookMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedBridge.log;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.callMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.callStaticMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findAndHookConstructor;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findAndHookMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findClass;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findMethodBestMatch;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findMethodExact;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.getBooleanField;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.getObjectField;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.setObjectField;
 import static sb.firefds.u.firefdskit.Xposed.reloadAndGetBooleanPref;
 import static sb.firefds.u.firefdskit.Xposed.reloadAndGetIntPref;
 import static sb.firefds.u.firefdskit.Xposed.reloadAndGetStringPref;
@@ -72,7 +72,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.TimeZone;
 
-import de.robv.android.xposed.XC_MethodHook;
+import sb.firefds.u.firefdskit.xposed.XC_MethodHook;
 
 public class XSysUIFeaturePackage {
 

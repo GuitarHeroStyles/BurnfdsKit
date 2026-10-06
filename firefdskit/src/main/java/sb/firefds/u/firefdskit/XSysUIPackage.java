@@ -14,13 +14,13 @@
  */
 package sb.firefds.u.firefdskit;
 
-import static de.robv.android.xposed.XposedBridge.log;
+import static sb.firefds.u.firefdskit.xposed.XposedBridge.log;
 
-import de.robv.android.xposed.XSharedPreferences;
+import android.content.SharedPreferences;
 
 public class XSysUIPackage {
 
-    public static void doHook(XSharedPreferences prefs, ClassLoader classLoader) {
+    public static void doHook(SharedPreferences prefs, ClassLoader classLoader) {
 
         try {
             XSysUIFeaturePackage.doHook(classLoader);

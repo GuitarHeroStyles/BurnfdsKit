@@ -14,7 +14,7 @@
  */
 package sb.firefds.u.firefdskit.actionViewModels;
 
-import static de.robv.android.xposed.XposedBridge.log;
+import static sb.firefds.u.firefdskit.xposed.XposedBridge.log;
 import static sb.firefds.u.firefdskit.XSysUIGlobalActions.getResources;
 import static sb.firefds.u.firefdskit.utils.Constants.SCREEN_RECORD_ACTION;
 import static sb.firefds.u.firefdskit.utils.Packages.SMART_CAPTURE;

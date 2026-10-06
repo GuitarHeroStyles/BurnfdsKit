@@ -15,12 +15,12 @@
 package sb.firefds.u.firefdskit;
 
 
-import static de.robv.android.xposed.XposedBridge.log;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedBridge.log;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findAndHookMethod;
 import static sb.firefds.u.firefdskit.Xposed.reloadAndGetBooleanPref;
 import static sb.firefds.u.firefdskit.utils.Preferences.PREF_MAKE_OFFICIAL;
 
-import de.robv.android.xposed.XC_MethodHook;
+import sb.firefds.u.firefdskit.xposed.XC_MethodHook;
 
 public class XFotaAgentPackage {
 

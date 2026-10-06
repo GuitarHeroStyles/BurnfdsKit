@@ -14,12 +14,12 @@
  */
 package sb.firefds.u.firefdskit;
 
-import static de.robv.android.xposed.XposedBridge.log;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedBridge.log;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findAndHookMethod;
 import static sb.firefds.u.firefdskit.Xposed.reloadAndGetBooleanPref;
 import static sb.firefds.u.firefdskit.utils.Preferences.PREF_DISABLE_NUMBER_FORMATTING;
 
-import de.robv.android.xposed.XC_MethodReplacement;
+import sb.firefds.u.firefdskit.xposed.XC_MethodReplacement;
 
 public class XContactsPackage {
     private static final String CSC_FEATURE_UTIL = "com.samsung.android.dialtacts.util.CscFeatureUtil";

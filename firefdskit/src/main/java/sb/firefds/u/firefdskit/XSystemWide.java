@@ -14,8 +14,8 @@
  */
 package sb.firefds.u.firefdskit;
 
-import static de.robv.android.xposed.XposedBridge.log;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedBridge.log;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findAndHookMethod;
 import static sb.firefds.u.firefdskit.Xposed.reloadAndGetBooleanPref;
 import static sb.firefds.u.firefdskit.utils.Constants.CONFIG_RECORDING;
 import static sb.firefds.u.firefdskit.utils.Constants.CONFIG_SVC_PROVIDER_FOR_UNKNOWN_NUMBER;
@@ -40,8 +40,8 @@ import com.samsung.android.feature.SemCscFeature;
 import com.samsung.android.feature.SemFloatingFeature;
 import com.samsung.android.wifi.SemWifiManager;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XC_MethodReplacement;
+import sb.firefds.u.firefdskit.xposed.XC_MethodHook;
+import sb.firefds.u.firefdskit.xposed.XC_MethodReplacement;
 
 public class XSystemWide {
 

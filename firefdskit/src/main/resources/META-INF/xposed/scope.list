@@ -1,0 +1,13 @@
+system
+com.android.systemui
+com.android.settings
+com.android.nfc
+com.sec.android.app.camera
+com.samsung.android.app.contacts
+com.samsung.android.app.telephonyui
+com.samsung.android.email.provider
+com.samsung.android.messaging
+com.samsung.android.MtpApplication
+com.sec.android.soagent
+com.samsung.android.app.smartcapture
+com.samsung.android.incallui

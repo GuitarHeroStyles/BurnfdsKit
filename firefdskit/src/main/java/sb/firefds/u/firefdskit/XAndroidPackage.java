@@ -14,14 +14,14 @@
  */
 package sb.firefds.u.firefdskit;
 
-import static de.robv.android.xposed.XposedBridge.log;
-import static de.robv.android.xposed.XposedHelpers.callMethod;
-import static de.robv.android.xposed.XposedHelpers.findAndHookConstructor;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.getAdditionalInstanceField;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.setAdditionalInstanceField;
+import static sb.firefds.u.firefdskit.xposed.XposedBridge.log;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.callMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findAndHookConstructor;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findAndHookMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findClass;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.getAdditionalInstanceField;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.getObjectField;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.setAdditionalInstanceField;
 import static sb.firefds.u.firefdskit.Xposed.reloadAndGetBooleanPref;
 import static sb.firefds.u.firefdskit.Xposed.reloadAndGetIntPref;
 import static sb.firefds.u.firefdskit.utils.Preferences.PREF_DEFAULT_REBOOT_BEHAVIOR;
@@ -52,7 +52,7 @@ import android.view.ViewConfiguration;
 import java.util.List;
 import java.util.Optional;
 
-import de.robv.android.xposed.XC_MethodHook;
+import sb.firefds.u.firefdskit.xposed.XC_MethodHook;
 
 public class XAndroidPackage {
 
@@ -135,7 +135,7 @@ public class XAndroidPackage {
             int hooked = 0;
             for (java.lang.reflect.Method method : shutdownThreadClass.getDeclaredMethods()) {
                 if (method.getName().equals("rebootOrShutdown")) {
-                    de.robv.android.xposed.XposedBridge.hookMethod(method, rebootHook);
+                    sb.firefds.u.firefdskit.xposed.XposedBridge.hookMethod(method, rebootHook);
                     hooked++;
                 }
             }

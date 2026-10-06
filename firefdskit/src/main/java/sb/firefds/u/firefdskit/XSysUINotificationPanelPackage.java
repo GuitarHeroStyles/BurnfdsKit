@@ -14,12 +14,12 @@
  */
 package sb.firefds.u.firefdskit;
 
-import static de.robv.android.xposed.XposedBridge.log;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.getObjectField;
-import static de.robv.android.xposed.XposedHelpers.getStaticObjectField;
-import static de.robv.android.xposed.XposedHelpers.setObjectField;
+import static sb.firefds.u.firefdskit.xposed.XposedBridge.log;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findAndHookMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findClass;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.getObjectField;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.getStaticObjectField;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.setObjectField;
 import static sb.firefds.u.firefdskit.Xposed.reloadAndGetBooleanPref;
 import static sb.firefds.u.firefdskit.Xposed.reloadAndGetStringPref;
 import static sb.firefds.u.firefdskit.utils.Packages.SYSTEM_UI;
@@ -37,7 +37,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import de.robv.android.xposed.XC_MethodHook;
+import sb.firefds.u.firefdskit.xposed.XC_MethodHook;
 
 public class XSysUINotificationPanelPackage {
 

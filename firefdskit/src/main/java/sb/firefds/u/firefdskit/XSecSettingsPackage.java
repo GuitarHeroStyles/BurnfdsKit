@@ -14,12 +14,12 @@
  */
 package sb.firefds.u.firefdskit;
 
-import static de.robv.android.xposed.XposedBridge.log;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
-import static de.robv.android.xposed.XposedHelpers.setStaticBooleanField;
-import static de.robv.android.xposed.XposedHelpers.setStaticIntField;
-import static de.robv.android.xposed.XposedHelpers.setStaticObjectField;
+import static sb.firefds.u.firefdskit.xposed.XposedBridge.log;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findAndHookMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findClass;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.setStaticBooleanField;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.setStaticIntField;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.setStaticObjectField;
 import static sb.firefds.u.firefdskit.Xposed.reloadAndGetBooleanPref;
 import static sb.firefds.u.firefdskit.Xposed.reloadAndGetIntPref;
 import static sb.firefds.u.firefdskit.utils.Packages.SAMSUNG_SETTINGS;
@@ -33,8 +33,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.UserManager;
 
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XC_MethodReplacement;
+import sb.firefds.u.firefdskit.xposed.XC_MethodHook;
+import sb.firefds.u.firefdskit.xposed.XC_MethodReplacement;
 
 public class XSecSettingsPackage {
 

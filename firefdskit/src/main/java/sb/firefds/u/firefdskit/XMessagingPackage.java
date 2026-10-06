@@ -14,16 +14,16 @@
  */
 package sb.firefds.u.firefdskit;
 
-import static de.robv.android.xposed.XposedBridge.log;
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-import static de.robv.android.xposed.XposedHelpers.findClass;
+import static sb.firefds.u.firefdskit.xposed.XposedBridge.log;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findAndHookMethod;
+import static sb.firefds.u.firefdskit.xposed.XposedHelpers.findClass;
 import static sb.firefds.u.firefdskit.Xposed.reloadAndGetBooleanPref;
 import static sb.firefds.u.firefdskit.utils.Packages.SAMSUNG_MESSAGING;
 import static sb.firefds.u.firefdskit.utils.Preferences.PREF_DISABLE_SMS_TO_MMS;
 import static sb.firefds.u.firefdskit.utils.Preferences.PREF_ENABLE_BLOCKED_PHRASES;
 import static sb.firefds.u.firefdskit.utils.Preferences.PREF_FORCE_MMS_CONNECT;
 
-import de.robv.android.xposed.XC_MethodReplacement;
+import sb.firefds.u.firefdskit.xposed.XC_MethodReplacement;
 
 public class XMessagingPackage {
 
