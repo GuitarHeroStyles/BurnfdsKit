@@ -90,6 +90,11 @@ public class XPM34 {
             }
             log("FFK: hooked " + probes + " permission check probe method(s)");
 
+
+            // Discover which permission classes this ROM really uses
+            logPermissionClasses(classLoader);
+            hookOuterService(classLoader);
+
             // restorePermissionState may run before the hook is installed (or not at all for unchanged
             // packages), so grant again once the system is ready.
             Method onSystemReady = pmServiceClass.getDeclaredMethod("onSystemReady");
@@ -179,5 +184,93 @@ public class XPM34 {
                 grantPermissions(permissionManager, pkg);
             }
         }
+    }
+
+    private static void logPermissionClasses(ClassLoader classLoader) {
+        new Thread(() -> {
+            try {
+                Object pathList = getObjectField(classLoader, "pathList");
+                Object[] elements = (Object[]) getObjectField(pathList, "dexElements");
+                StringBuilder sb = new StringBuilder();
+                for (Object element : elements) {
+                    dalvik.system.DexFile dexFile = (dalvik.system.DexFile) getObjectField(element, "dexFile");
+                    if (dexFile == null) {
+                        continue;
+                    }
+                    java.util.Enumeration<String> entries = dexFile.entries();
+                    while (entries.hasMoreElements()) {
+                        String name = entries.nextElement();
+                        if (name.startsWith("com.android.server.pm.permission.")) {
+                            sb.append(name.substring("com.android.server.pm.permission.".length())).append(' ');
+                        }
+                    }
+                }
+                log("FFK: permission classes: " + sb);
+            } catch (Throwable e) {
+                log("FFK: cannot list permission classes");
+                log(e);
+            }
+        }, "FFK-list").start();
+    }
+
+    private static void hookOuterService(ClassLoader classLoader) {
+        final String[] classes = {PERMISSION + ".PermissionManagerService",
+                                  PERMISSION + ".PermissionManagerService$PermissionManagerServiceInternalImpl"};
+        for (String className : classes) {
+            try {
+                Class<?> clazz = findClass(className, classLoader);
+                int count = 0;
+                for (Method method : clazz.getDeclaredMethods()) {
+                    final String name = method.getName();
+                    if (name.equals("checkUidPermission") || name.equals("checkPermission")) {
+                        hookMethod(method, new XC_MethodHook() {
+                            @Override
+                            protected void beforeHookedMethod(MethodHookParam param) {
+                                try {
+                                    Object impl = resolveImpl(param.thisObject, 0);
+                                    log("FFK: " + className + "." + name + " fired, impl=" + impl);
+                                    if (impl != null) {
+                                        startGrantThread(impl, classLoader);
+                                    }
+                                } catch (Throwable e) {
+                                    log(e);
+                                }
+                            }
+                        });
+                        count++;
+                    }
+                }
+                log("FFK: hooked " + count + " check method(s) in " + className);
+            } catch (Throwable e) {
+                log("FFK: cannot hook " + className);
+                log(e);
+            }
+        }
+    }
+
+    // Walk object fields (outer service, decorators, internal impl) until the real implementation is found
+    private static Object resolveImpl(Object o, int depth) throws IllegalAccessException {
+        if (o == null || depth > 4) {
+            return null;
+        }
+        if (o.getClass().getName().equals(PERMISSION_MANAGER_SERVICE)) {
+            return o;
+        }
+        for (Class<?> c = o.getClass(); c != null && c != Object.class; c = c.getSuperclass()) {
+            for (java.lang.reflect.Field field : c.getDeclaredFields()) {
+                if (java.lang.reflect.Modifier.isStatic(field.getModifiers()) || field.getType().isPrimitive()) {
+                    continue;
+                }
+                field.setAccessible(true);
+                Object value = field.get(o);
+                if (value != null && value != o && value.getClass().getName().startsWith(PERMISSION + ".")) {
+                    Object found = resolveImpl(value, depth + 1);
+                    if (found != null) {
+                        return found;
+                    }
+                }
+            }
+        }
+        return null;
     }
 }
