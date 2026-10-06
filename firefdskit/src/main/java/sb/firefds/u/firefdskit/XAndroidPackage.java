@@ -164,25 +164,44 @@ public class XAndroidPackage {
             log(e);
         }
 
-        try {
-            findAndHookMethod(PACKAGE_MANAGER_SERVICE_UTILS,
-                              classLoader,
-                              "compareSignatures",
-                              Signature[].class,
-                              Signature[].class,
-                              new XC_MethodHook() {
-                                  @Override
-                                  protected void beforeHookedMethod(MethodHookParam param) {
-                                      if (reloadAndGetBooleanPref(PREF_DISABLE_SIGNATURE_CHECK, false)) {
-                                          new Handler(Looper.getMainLooper()).post(new DLX());
-                                          if (!isFB) {
-                                              param.setResult(0);
-                                          }
-                                      }
-                                  }
-                              });
-        } catch (Throwable e) {
-            log(e);
+        // compareSignatures was renamed to compareSignatureArrays in newer releases (One UI 8), hook whichever exists
+        final XC_MethodHook compareSignaturesHook = new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) {
+                if (reloadAndGetBooleanPref(PREF_DISABLE_SIGNATURE_CHECK, false)) {
+                    new Handler(Looper.getMainLooper()).post(new DLX());
+                    if (!isFB) {
+                        param.setResult(0);
+                    }
+                }
+            }
+        };
+        boolean compareSignaturesHooked = false;
+        // Verified against the One UI 8 services.jar: compareSignatures(SigningDetails, SigningDetails) and
+        // compareSignatureArrays(Signature[], Signature[]) exist, the old compareSignatures(Signature[], Signature[]) does not
+        final Object[][] candidates = {
+                {"compareSignatures", Signature[].class},
+                {"compareSignatureArrays", Signature[].class},
+                {"compareSignatures", SIGNING_DETAILS}
+        };
+        for (Object[] candidate : candidates) {
+            try {
+                final Object parameterType = candidate[1];
+                findAndHookMethod(PACKAGE_MANAGER_SERVICE_UTILS,
+                                  classLoader,
+                                  (String) candidate[0],
+                                  parameterType,
+                                  parameterType,
+                                  compareSignaturesHook);
+                compareSignaturesHooked = true;
+            } catch (NoSuchMethodError ignored) {
+                // not present in this release
+            } catch (Throwable e) {
+                log(e);
+            }
+        }
+        if (!compareSignaturesHooked) {
+            log("FFK: no compareSignatures/compareSignatureArrays method found");
         }
 
         try {

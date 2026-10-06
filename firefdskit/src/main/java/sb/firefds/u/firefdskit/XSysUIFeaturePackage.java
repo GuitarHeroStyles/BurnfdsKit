@@ -211,6 +211,24 @@ public class XSysUIFeaturePackage {
                                       }
                                   }
                               });
+        } catch (NoSuchMethodError ignored) {
+            // Removed in One UI 8, the dialog flag is handled through SettingsHelper below
+        } catch (Throwable e) {
+            log(e);
+        }
+
+        try {
+            // One UI 8: the "using high brightness" dialog is only shown while this flag is 0
+            findAndHookMethod(SETTINGS_HELPER, classLoader, "getShownMaxBrightnessDialog", new XC_MethodHook() {
+                @Override
+                protected void beforeHookedMethod(MethodHookParam param) {
+                    if (reloadAndGetBooleanPref(PREF_DISABLE_EYE_STRAIN_DIALOG, false)) {
+                        param.setResult(1);
+                    }
+                }
+            });
+        } catch (NoSuchMethodError ignored) {
+            // older releases do not have it
         } catch (Throwable e) {
             log(e);
         }
@@ -388,7 +406,11 @@ public class XSysUIFeaturePackage {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) {
                     if (reloadAndGetBooleanPref(PREF_ENABLE_QUICK_REPLY_ON_SECURE_LOCKSCREEN, false)) {
-                        setObjectField(param.thisObject, "mAllowLockscreenRemoteInput", true);
+                        try {
+                            setObjectField(param.thisObject, "mAllowLockscreenRemoteInput", true);
+                        } catch (NoSuchFieldError ignored) {
+                            // Field no longer exists in One UI 8
+                        }
                     }
                 }
             });

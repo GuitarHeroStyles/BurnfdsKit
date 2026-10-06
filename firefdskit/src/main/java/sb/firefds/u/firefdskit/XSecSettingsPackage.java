@@ -118,6 +118,8 @@ public class XSecSettingsPackage {
                               classLoader,
                               "isAlterModel",
                               XC_MethodReplacement.returnConstant(!reloadAndGetBooleanPref(PREF_MAKE_OFFICIAL, true)));
+        } catch (NoSuchMethodError ignored) {
+            // Removed in One UI 8, checkRootingCondition and isPhoneStatusUnlocked still cover the Official status
         } catch (Throwable e) {
             log(e);
         }
