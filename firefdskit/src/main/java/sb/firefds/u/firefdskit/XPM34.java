@@ -173,7 +173,7 @@ public class XPM34 {
             Object pmi = null;
             try {
                 final Class<?> localServices = findClass("com.android.server.LocalServices", classLoader);
-                final Class<?> pmInternal = findClass("com.android.server.pm.PackageManagerInternal", classLoader);
+                final Class<?> pmInternal = findClass("android.content.pm.PackageManagerInternal", classLoader);
                 pmi = callStaticMethod(localServices, "getService", pmInternal);
             } catch (Throwable e) {
                 logFailure("cannot get PackageManagerInternal", e);
