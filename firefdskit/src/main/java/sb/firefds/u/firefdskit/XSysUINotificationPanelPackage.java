@@ -35,8 +35,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import de.robv.android.xposed.XC_MethodHook;
 
@@ -161,29 +163,43 @@ public class XSysUINotificationPanelPackage {
         }
     }
 
+    private static boolean iconMapLogged;
+
     private static void set4gDataIcon(HashMap<String, Object> hashMap, Class<?> telephonyIconsClass) {
-        String dataBehavior4g = FOUR_G_DATA_ICONS_MAP.getOrDefault(reloadAndGetStringPref(PREF_4G_DATA_ICON_BEHAVIOR,
-                                                                                         "0"), "DEFAULT");
-        String dataBehavior4gPlus = FOUR_G_PLUS_DATA_ICONS_MAP.getOrDefault(reloadAndGetStringPref(
-                PREF_4G_PLUS_DATA_ICON_BEHAVIOR,
-                "0"), "DEFAULT");
+        String behavior4g = reloadAndGetStringPref(PREF_4G_DATA_ICON_BEHAVIOR, "0");
+        String behavior4gPlus = reloadAndGetStringPref(PREF_4G_PLUS_DATA_ICON_BEHAVIOR, "0");
+        String dataBehavior4g = FOUR_G_DATA_ICONS_MAP.getOrDefault(behavior4g, "DEFAULT");
+        String dataBehavior4gPlus = FOUR_G_PLUS_DATA_ICONS_MAP.getOrDefault(behavior4gPlus, "DEFAULT");
         String NETWORK_TYPE_LTE = Integer.toString(TelephonyManager.NETWORK_TYPE_LTE);
-        // LTE with carrier aggregation, shown as 4G+
-        String NETWORK_TYPE_LTE_PLUS = NETWORK_TYPE_LTE + "CA_Plus";
+
+        if (!iconMapLogged) {
+            iconMapLogged = true;
+            log("FFK: mobile icon map keys=" + hashMap.keySet() + " 4g=" + behavior4g + " 4g+=" + behavior4gPlus);
+        }
+
+        // LTE with carrier aggregation (shown as 4G+). The key spelling differs between releases
+        // (13CA_Plus, 13_CA_Plus, 13_CA...), so every LTE key that is not the plain one is treated as such.
+        Set<String> carrierAggregationKeys = new HashSet<>();
+        carrierAggregationKeys.add(NETWORK_TYPE_LTE + "CA_Plus");
+        for (String key : hashMap.keySet()) {
+            if (key.startsWith(NETWORK_TYPE_LTE) && key.length() > NETWORK_TYPE_LTE.length()) {
+                carrierAggregationKeys.add(key);
+            }
+        }
         boolean plusIsDefault = dataBehavior4gPlus.equals("DEFAULT");
 
         switch (dataBehavior4g) {
             case LTE:
                 hashMap.put(NETWORK_TYPE_LTE, getStaticObjectField(telephonyIconsClass, LTE));
                 if (plusIsDefault) {
-                    hashMap.put(NETWORK_TYPE_LTE_PLUS, getStaticObjectField(telephonyIconsClass, LTE_PLUS));
+                    putAll(hashMap, carrierAggregationKeys, getStaticObjectField(telephonyIconsClass, LTE_PLUS));
                 }
                 break;
             case FOUR_G_PLUS:
                 Object fourGPlus = getStaticObjectField(telephonyIconsClass, FOUR_G_PLUS);
                 hashMap.put(NETWORK_TYPE_LTE, fourGPlus);
                 if (plusIsDefault) {
-                    hashMap.put(NETWORK_TYPE_LTE_PLUS, fourGPlus);
+                    putAll(hashMap, carrierAggregationKeys, fourGPlus);
                 }
                 break;
         }
@@ -191,11 +207,17 @@ public class XSysUINotificationPanelPackage {
         // The 4G+ icon has its own setting, which wins over the 4G one
         switch (dataBehavior4gPlus) {
             case FOUR_HALF_G:
-                hashMap.put(NETWORK_TYPE_LTE_PLUS, getStaticObjectField(telephonyIconsClass, FOUR_HALF_G));
+                putAll(hashMap, carrierAggregationKeys, getStaticObjectField(telephonyIconsClass, FOUR_HALF_G));
                 break;
             case LTE_PLUS:
-                hashMap.put(NETWORK_TYPE_LTE_PLUS, getStaticObjectField(telephonyIconsClass, LTE_PLUS));
+                putAll(hashMap, carrierAggregationKeys, getStaticObjectField(telephonyIconsClass, LTE_PLUS));
                 break;
+        }
+    }
+
+    private static void putAll(HashMap<String, Object> hashMap, Set<String> keys, Object icon) {
+        for (String key : keys) {
+            hashMap.put(key, icon);
         }
     }
 
