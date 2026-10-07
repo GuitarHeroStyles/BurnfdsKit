@@ -1,6 +1,18 @@
 # Firefds Kit [Baklava]
 
-Xposed module for Samsung devices running Android 14 to Android 16 (One UI 6 - 8).
+Xposed module for Samsung devices running Android 14 to Android 16 (One UI 6 - 8), built on the
+modern LSPosed / libxposed API (102).
+
+## Thanks to the original author
+
+A huge thank you to **Shauli Bracha ([Firefds](https://github.com/Firefds))**, the creator of Firefds
+Kit, who built and maintained this module for years. The original project is
+[Firefds/FirefdsKit](https://github.com/Firefds/FirefdsKit). Without that work this fork would not
+exist.
+
+The original repository is no longer being updated, so this is now an independently maintained
+continuation by [GuitarHeroStyles](https://github.com/GuitarHeroStyles) that brings the module to
+Android 16 / One UI 8. All of the original design and most of the code are Firefds' work, thank you!
 
 ## Features
 
@@ -37,7 +49,10 @@ The module has the following features:
 - Add date to status bar clock options
 - Enable biometrics and fingerprints unlock on reboot toggle
 - Add network speed menu to show network speed in the status bar
-- Data icon symbol selection (4G, LTE, 4G+, 4.5G)
+- Data icon symbol selection:
+    - 4G icon: LTE instead of 4G, 4G+ instead of 4G
+    - 4G+ icon: 4.5G instead of 4G+, LTE+ instead of 4G+
+    - 5G icon: 5G One shaped, 5G, 5G+ shaped
 - Show Data usage view in quick panel
 - Double tap for sleep
 - Hide NFC icon
@@ -63,48 +78,58 @@ The module has the following features:
 
 ## Attention
 
-**THERE COULD BE BUGS/CRASHES/BOOTLOOPS**, but it's pretty stable.
-Please upload any xposed logs when you encounter any issue. I can't help you without the logs!
-Confirmed working on:
+**THERE COULD BE BUGS/CRASHES/BOOTLOOPS**. Please upload the LSPosed module log (search for `FFK`)
+when you encounter any issue, it is the only way to find out which hook stopped working.
 
-- Galaxy S21 FE
+Tested on:
+
+- Galaxy A52s 5G running One UI 8 (Android 16) with the UN1CA ROM, LSPosed API 102
+- Galaxy S21 FE (original project, One UI 6)
 
 ## Installation
 
-To install this module you need the following apps and modules installed on your device:
+You need a root solution with an LSPosed compatible framework that supports the modern libxposed API
+(102), for example [LSPosed](https://github.com/LSPosed/LSPosed/releases) or
+[Vector](https://github.com/JingMatrix/Vector). Modules built with the old API still work on these
+frameworks, but this module uses the modern one.
 
-1. Magisk v26.0 and above - https://github.com/topjohnwu/Magisk/releases
+1. Install the Firefds Kit APK.
+2. Enable the module in the LSPosed manager and select its scope. The scope is fixed by the module,
+   make sure **System Framework** and **Firefds Kit itself** are checked.
+3. Reboot.
+4. Open Firefds Kit once, so that your settings are copied to the framework.
 
-### Option 1 - Zygisk - Recommended
-
-1. LSPosed Magisk Zygisk Release module v1.9.2 and
-   above - https://github.com/LSPosed/LSPosed/releases
-
-### Option 2 - Riru
-
-1. LSPosed Magisk module v1.9.2 and above - https://github.com/LSPosed/LSPosed/releases
-2. Riru Magisk module v26.1.7 and above - https://github.com/RikkaApps/Riru/releases
+The status card at the top of the app turns green when the module is active and has all of its
+permissions.
 
 ## Known Issues
 
 - Some features are removed on purpose. Since GravityBox has been working on Samsung devices for a
-  while without much issues, I only implemented features that need special Samsung coding. You can
-  check You can check GravityBox for R, when it will become available, for additional features.
+  while without much issues, only features that need special Samsung coding were implemented.
+- One UI 8 removed or changed some of the code this module hooks. These features no longer work:
+    - Official status through `isAlterModel` (the other status checks are still hooked)
+    - Quick reply on the secure lock screen
+    - Screen recorder while in a call (Samsung SmartCapture)
+    - Camera temperature check bypass (the camera app obfuscates its class names on every update)
+- Features that depend on Samsung internals may break again with a new One UI release.
 - Double tap for sleep not working.
-- Data icon symbol selection not working.
 
 ## External Libraries
 
 The project uses the following libraries:
 
-1. https://github.com/rovo89/XposedBridge
-2. https://github.com/rovo89/XposedMods/tree/master/XposedLibrary
-3. Samsung framework libraries which are used for compile only
+1. [libxposed](https://github.com/libxposed) - the modern Xposed API (102) and its service library
+2. https://github.com/rovo89/XposedBridge and
+   https://github.com/rovo89/XposedMods/tree/master/XposedLibrary - the legacy API, whose helper
+   methods are re-implemented in `sb.firefds.u.firefdskit.xposed` on top of libxposed
+3. Samsung framework libraries (from One UI 8) which are used for compile only
 
 ## Credits
 
 This module wouldn't have been here without the following people:
 
+- [Shauli Bracha (Firefds)](https://github.com/Firefds) - Creator of Firefds Kit, the original
+  author of this module. Thank you!
 - The people behind [LSPosed](https://github.com/LSPosed/LSPosed) for their amazing work!
 - [RikkaW](https://github.com/RikkaApps) - Creator of Riru Magisk module, which provides a way to
   inject codes into zygote process
@@ -124,6 +149,11 @@ This module wouldn't have been here without the following people:
 This is a moded version of Wanam's XTouchWiz:
 https://github.com/wanam/XTouchWiz
 
-## Telegram
+## License
 
-Announcements and pre release versions - https://t.me/firefdskit
+Licensed under the Apache License, Version 2.0, the same license as the original project. The
+copyright notices of the original author in the source files must be kept.
+
+## Telegram (original project)
+
+Announcements and pre release versions of the original module - https://t.me/firefdskit
