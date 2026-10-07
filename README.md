@@ -146,8 +146,8 @@ This module wouldn't have been here without the following people:
   and [ianmacd](https://forum.xda-developers.com/m/ianmacd.7187684) for testing countless versions
   and sending xposed logs
 
-This is a moded version of Wanam's XTouchWiz:
-https://github.com/wanam/XTouchWiz
+This is a modded version of Firefds Kit by Firefds:
+https://github.com/Firefds/FirefdsKit
 
 ## License
 
