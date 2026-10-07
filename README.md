@@ -129,7 +129,7 @@ The project uses the following libraries:
 This module wouldn't have been here without the following people:
 
 - [Shauli Bracha (Firefds)](https://github.com/Firefds) - Creator of Firefds Kit, the original
-  author of this module. Thank you!
+  author of this module.
 - The people behind [LSPosed](https://github.com/LSPosed/LSPosed) for their amazing work!
 - [RikkaW](https://github.com/RikkaApps) - Creator of Riru Magisk module, which provides a way to
   inject codes into zygote process
@@ -154,6 +154,3 @@ https://github.com/Firefds/FirefdsKit
 Licensed under the Apache License, Version 2.0, the same license as the original project. The
 copyright notices of the original author in the source files must be kept.
 
-## Telegram (original project)
-
-Announcements and pre release versions of the original module - https://t.me/firefdskit
