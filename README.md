@@ -142,9 +142,7 @@ This module wouldn't have been here without the following people:
   based on.
 - [topjohnwu](https://github.com/topjohnwu) - Creator of Magisk
 - [AbrahamGC](https://forum.xda-developers.com/member.php?u=7393522) - [For the Extended Power Menu - Pie - Odex framework Smali guide](https://forum.xda-developers.com/showpost.php?p=78910083&postcount=944)
-- Big thank you to [m8980](https://forum.xda-developers.com/m/m8980.1614889)
-  and [ianmacd](https://forum.xda-developers.com/m/ianmacd.7187684) for testing countless versions
-  and sending xposed logs
+
 
 This is a modded version of Firefds Kit by Firefds:
 https://github.com/Firefds/FirefdsKit
