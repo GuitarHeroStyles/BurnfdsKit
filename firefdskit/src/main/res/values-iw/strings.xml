@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Firefds Kit [Baklava]</string>
+    <string name="app_name">BurnfdsKit [Baklava]</string>
     <string name="samsung_rom_warning">יש צורך ברום של סמסונג</string>
     <string name="samsung_rom_warning_msg">הרום שלך לא נראה כרום של סמסונג. האפליקציה הזו לא תומכת ברומים מסוג AOSP ו CM</string>
     <string name="disable_loud_volume_enabled">התראת עוצמת שמע גבוהה פועלת</string>
@@ -25,7 +25,7 @@
     <string name="quick_reboot">הפעלה מחדש מהירה</string>
     <string name="reboot_required">אנא הפעל מחדש על מנת להחיל את השינויים</string>
     <string name="reboot_required_title">נדרשת הפעלה מחדש</string>
-    <string name="reboot_required_message">Firefds Kit דורש הפעלה מחדש</string>
+    <string name="reboot_required_message">BurnfdsKit דורש הפעלה מחדש</string>
     <string name="credit_details">"\nתודה ל Rovo89 על יצירת מסגרת ה Xposed.\n\nתודה ל C3C076, RikkaW, solohsu, MlgmXyysd על התרומה שלהם ליצירת Xposed ומודלים.\n\nמפתח: <a href="http://forum.xda-developers.com/member.php?u=3844620">Firefds firefds@Xda-Developers</a>\n\nמבוסס על XTouchWiz של:\n\n<a href="http://forum.xda-developers.com/member.php?u=3562083">Wanam @Xda-Developers</a>"</string>
     <string name="restore">שיחזור גיבוי</string>
     <string name="save">שמירת גיבוי</string>
@@ -75,7 +75,7 @@
     <string name="disable_temperature_warnings_on_the_recording">ביטול התראות טמפרטורה בעת הקלטה ושימוש בהבזק. שימוש רק במקרה שצריך!</string>
     <string name="call_recording">הקלטת שיחות</string>
     <string name="call_recording_summary">הפעלת הקלטת שיחות והגדרות הקלטה בהגדרות טלפון</string>
-    <string name="firefds_kit_is_not_active">Firefds Kit לא פועל! יש לוודא:\n- ליישום זה דרושות השראות Root\n- מסגרת Xposed מתוקנת\n- מודל זה מופעל ב Xposed installer ואז הפעלה מחדש.</string>
+    <string name="firefds_kit_is_not_active">BurnfdsKit לא פועל! יש לוודא:\n- ליישום זה דרושות השראות Root\n- מסגרת Xposed מתוקנת\n- מודל זה מופעל ב Xposed installer ואז הפעלה מחדש.</string>
     <string name="screenshot">צילום מסך</string>
     <string name="add_screenshot_to_power_menu">הוספת צילום מסך לתפריט כיבוי</string>
     <string name="advanced_power_menu_title">תפריט כיבוי מורחב</string>
@@ -154,9 +154,9 @@
     <string name="nav_header_subtitle">התאמה אישית של מכשיר ה Samsung שלך</string>
     <string name="navigation_drawer_open">פתיחת מגירת ניווט</string>
     <string name="navigation_drawer_close">סגירת מגירת ניווט</string>
-    <string name="nav_header_desc">לוגו Firefds Kit</string>
+    <string name="nav_header_desc">לוגו BurnfdsKit</string>
     <string name="status_icon">אייקון מצב</string>
-    <string name="xposed_status">Firefds Kit מופעל</string>
+    <string name="xposed_status">BurnfdsKit מופעל</string>
     <string name="restartUI">הפעלה מחדש של SystemUI</string>
     <string name="add_restart_ui_to_power_menu">הוספת הפעלה מחדש של SystemUI לתפריט הכיבוי</string>
     <string name="power_menu_options_title">אפשרויות תפריט כיבוי</string>
@@ -207,17 +207,17 @@
     <string name="enable_screen_record_in_call_summary">הפעלת הקלטת מסך בזמן שיחה</string>
     <string name="enable_screen_record_in_call_title">הקלטת מסך בזמן שיחה</string>
     <string name="language_settings">הגדרות שפה</string>
-    <string name="force_english_summary">כפיית שפת הממשק של Firefds Kit לאנגלית</string>
+    <string name="force_english_summary">כפיית שפת הממשק של BurnfdsKit לאנגלית</string>
     <string name="force_english_title">כפיית שפה לאנגלית</string>
     <string name="language_toast">שפת הממשק תשתנה לאחר הפעלת המודל מחדש</string>
-    <string name="firefds_kit_settings">הגדרות Firefds Kit</string>
+    <string name="firefds_kit_settings">הגדרות BurnfdsKit</string>
     <string name="default_text">ברירת מחדל</string>
     <string name="am_pm_on_clock_summary">הצגת AM/PM בשעון שורת המצב</string>
     <string name="am_pm_on_clock_title">הצגת AM/PM בשעון</string>
     <string name="clock_size">גודל שעון</string>
     <string name="enable_spam_protection_summary">הפעלת שיחה מזוהה והגנת ספאם</string>
     <string name="enable_spam_protection_title">שיחה מזוהה והגנת ספאם</string>
-    <string name="no_permissions">מודל Firefds Kit פועל אך לא קיבל את כל ההרשאות.\nחלק מהאפשרויות לא יעבדו כמו שצריך.\nיש לבדוק את התקנת Magisk</string>
+    <string name="no_permissions">מודל BurnfdsKit פועל אך לא קיבל את כל ההרשאות.\nחלק מהאפשרויות לא יעבדו כמו שצריך.\nיש לבדוק את התקנת Magisk</string>
     <string name="enable_dual_sim_sd_card_summary">הפעלת כרטיס זיכרון חיצוני בזמן שימוש ב-2 כרטיסי סים</string>
     <string name="enable_dual_sim_sd_card_title">כרטיס זיכרון עם 2 סים</string>
     <string name="enable_quick_reply_on_secure_lockscreen_summary">הפעלת תשובה מהירה במסך נעילה מאובטח</string>

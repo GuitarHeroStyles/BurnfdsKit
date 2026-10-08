@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Firefds Kit [Baklava]</string>
+    <string name="app_name">BurnfdsKit [Baklava]</string>
     <string name="module_description">Made for stock Samsung devices supporting Android 14 - 16 Roms by Firefds</string>
     <string name="samsung_rom_warning">Samsung ROM required</string>
     <string name="samsung_rom_warning_msg">Your ROM doesn\'t seem to be a Samsung ROM\nThis application doesn\'t support CM or AOSP ROMs.</string>
@@ -27,7 +27,7 @@
     <string name="quick_reboot">Quick Restart</string>
     <string name="reboot_required">Please reboot to apply changes.</string>
     <string name="reboot_required_title">Reboot requested</string>
-    <string name="reboot_required_message">Firefds Kit requires a reboot to apply changes</string>
+    <string name="reboot_required_message">BurnfdsKit requires a reboot to apply changes</string>
     <string name="credit_details">\nThanks to Rovo89 for creating Xposed framework.\n\nThanks to C3C076, RikkaW, solohsu, MlgmXyysd for their contribution on Xposed framework and modules.\n\nDeveloper: <a href="http://forum.xda-developers.com/member.php?u=3844620">Firefds firefds@Xda-Developers</a>\n\nBased on XTouchWiz by:\n\<a href="http://forum.xda-developers.com/member.php?u=3562083">Wanam @Xda-Developers</a></string>
     <string name="restore">Restore a backup</string>
     <string name="save">Save a backup</string>
@@ -79,7 +79,7 @@
     <string name="disable_temperature_warnings_on_the_recording">Disable temperature warnings on the recording and flash use. Use it only if you need it!</string>
     <string name="call_recording">Call recording</string>
     <string name="call_recording_summary">Enable call recording and call recording settings in Phone settings</string>
-    <string name="firefds_kit_is_not_active">Firefds Kit is NOT active! Make sure:\n- Xposed framework is installed\n- This module is enabled on Xposed installer then REBOOT.</string>
+    <string name="firefds_kit_is_not_active">BurnfdsKit is NOT active! Make sure:\n- Xposed framework is installed\n- This module is enabled on Xposed installer then REBOOT.</string>
     <string name="screenshot">Screenshot</string>
     <string name="add_screenshot_to_power_menu">Enable Screenshot in power menu</string>
     <string name="advanced_power_menu_title">Advanced Power Menu</string>
@@ -155,11 +155,11 @@
     <string name="multiUser">Multi User</string>
     <string name="switchUser">Switch User</string>
     <string name="nav_header_subtitle">Customize your Samsung device</string>
-    <string name="nav_header_desc">Firefds Kit logo</string>
+    <string name="nav_header_desc">BurnfdsKit logo</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="status_icon">status icon</string>
-    <string name="xposed_status">Firefds Kit Xposed features activated</string>
+    <string name="xposed_status">BurnfdsKit Xposed features activated</string>
     <string name="restartUI">Restart SystemUI</string>
     <string name="add_restart_ui_to_power_menu">Enable Restart SystemUI in power menu</string>
     <string name="power_menu_options_title">Power Menu Options</string>
@@ -210,17 +210,17 @@
     <string name="enable_screen_record_in_call_summary">Enable screen recording while call is active</string>
     <string name="enable_screen_record_in_call_title">Enable Screen Recording In Call</string>
     <string name="language_settings">Language Settings</string>
-    <string name="force_english_summary">Forces Firefds Kit to use English language</string>
+    <string name="force_english_summary">Forces BurnfdsKit to use English language</string>
     <string name="force_english_title">Force English Language</string>
     <string name="language_toast">Language change will take affect after application module restart</string>
-    <string name="firefds_kit_settings">Firefds Kit Settings</string>
+    <string name="firefds_kit_settings">BurnfdsKit Settings</string>
     <string name="default_text">Default</string>
     <string name="am_pm_on_clock_summary">Show AM/PM on status bar clock</string>
     <string name="am_pm_on_clock_title">AM/PM on Clock</string>
     <string name="clock_size">Clock size</string>
     <string name="enable_spam_protection_summary">Enable Caller ID and spam protection</string>
     <string name="enable_spam_protection_title">Caller ID and Spam Protection</string>
-    <string name="no_permissions">Firefds Kit is active, but some permissions were not granted.\nSome features will not work correctly.\nPlease check your Magisk installation (sepolicy not granted).</string>
+    <string name="no_permissions">BurnfdsKit is active, but some permissions were not granted.\nSome features will not work correctly.\nPlease check your Magisk installation (sepolicy not granted).</string>
     <string name="enable_dual_sim_sd_card_summary">Enable sd card while using dual sim cards</string>
     <string name="enable_dual_sim_sd_card_title">SD Card With Dual Sim</string>
     <string name="enable_quick_reply_on_secure_lockscreen_summary">Enable quick reply while on a secure lockscreen</string>

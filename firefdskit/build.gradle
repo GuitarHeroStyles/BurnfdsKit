@@ -20,7 +20,7 @@ android {
     }
     applicationVariants.configureEach { variant ->
         variant.outputs.configureEach { output ->
-            outputFileName = "FirefdsKit_B_${defaultConfig.versionName}.apk"
+            outputFileName = "BurnfdsKit_B_${defaultConfig.versionName}.apk"
         }
     }
     buildTypes {

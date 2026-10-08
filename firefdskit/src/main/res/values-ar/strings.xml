@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Firefds Kit [Baklava]</string>
+    <string name="app_name">BurnfdsKit [Baklava]</string>
     <string name="samsung_rom_warning">يحتاج إلى ورم سامسونغ</string>
     <string name="samsung_rom_warning_msg">يبدو أن الروم الحالي ليس بروم سامسونغ\n.AOSPو CM هذا التطبيق لا يدعم رومات</string>
     <string name="disable_loud_volume_enabled">تحذير لصوت عال مفعّل</string>
@@ -26,7 +26,7 @@
     <string name="quick_reboot">إعادة التشغيل السريع</string>
     <string name="reboot_required">يرجى إعادة التشغيل لتطبيق التغييرات.</string>
     <string name="reboot_required_title">تم طلب إعادة التشغيل</string>
-    <string name="reboot_required_message">يحتاج Firefds Kit إلى إعادة التشغيل لتطبيق التغييرات</string>
+    <string name="reboot_required_message">يحتاج BurnfdsKit إلى إعادة التشغيل لتطبيق التغييرات</string>
     <string name="credit_details">\nالشكر لـ Rovo89 على إنشاء Xposed framework.\n\nالشكر لـC3C076, RikkaW, solohsu, MlgmXyysd على مساهماتهم في Xposed framework والوحدات.\n\n\nالمطور: <a href="http://forum.xda-developers.com/member.php?u=3844620">Firefds firefds@Xda-Developers</a>\n\n\nاستنادا إلى XTouchWiz من طرف  :\n\n\\<a href="http://forum.xda-developers.com/member.php?u=3562083">Wanam @Xda-Developers</a></string>
     <string name="restore">استعادة نسخة احتياطية</string>
     <string name="save">حفظ نسخة احتياطية</string>
@@ -78,7 +78,7 @@
     <string name="disable_temperature_warnings_on_the_recording">تعطيل تحذيرات درجة الحرارة في المسجّل وعند استعمال الفلاش‫.‬ استعمل هذا فقط عند الحاجة‫!‬</string>
     <string name="call_recording">تسجيل المكالمة</string>
     <string name="call_recording_summary">تفعيل تسجيل المكالمة وإعدادات تسجيل المكالمة في إعدادت الهاتف</string>
-    <string name="firefds_kit_is_not_active">لم يتم تفعيل Firefds Kit! تأكد من أن‫:‬ \n\n-هذا التطبيق له ترخيص صلاحيات الجذر\n\nXposed framework تم تثبيت-\n\n-هذه الوحدة مفعلة في المثبت Xposed. ثم قم بإعادة التشغيل</string>
+    <string name="firefds_kit_is_not_active">لم يتم تفعيل BurnfdsKit! تأكد من أن‫:‬ \n\n-هذا التطبيق له ترخيص صلاحيات الجذر\n\nXposed framework تم تثبيت-\n\n-هذه الوحدة مفعلة في المثبت Xposed. ثم قم بإعادة التشغيل</string>
     <string name="screenshot">لقطة الشاشة</string>
     <string name="add_screenshot_to_power_menu">تفعيل لقطة الشاشة في قائمة الطاقة</string>
     <string name="advanced_power_menu_title">قائمة الطاقة المتقدمة</string>
@@ -146,11 +146,11 @@
     <string name="multiUser">متعدد المستخدمين</string>
     <string name="switchUser">تغيير المستخدم</string>
     <string name="nav_header_subtitle">تخصيص لجهازك سامسونغ</string>
-    <string name="nav_header_desc">Firefds Kit شعار</string>
+    <string name="nav_header_desc">BurnfdsKit شعار</string>
     <string name="navigation_drawer_open">فتح درج التنقل</string>
     <string name="navigation_drawer_close">غلق درج التنقل</string>
     <string name="status_icon">أيقون الحالة</string>
-    <string name="xposed_status">ميزات Firefds Kit للـXposed مفعّلة</string>
+    <string name="xposed_status">ميزات BurnfdsKit للـXposed مفعّلة</string>
     <string name="restartUI">SystemUI إعادة تشغيل</string>
     <string name="add_restart_ui_to_power_menu">تفعيل إعادة تشغيل SystemUI في قائمة الطاقة</string>
     <string name="power_menu_options_title">خيارات قائمة الطاقة</string>
@@ -201,10 +201,10 @@
     <string name="enable_screen_record_in_call_summary">تفعيل تسجيل الشاشة أثناء مكالمة نشطة</string>
     <string name="enable_screen_record_in_call_title">تفعيل تسجيل الشاشة أثناء المكالمة</string>
     <string name="language_settings">إعدادات اللغة</string>
-    <string name="force_english_summary">إجبار Firefds Kit على استعمال الإنجليزية</string>
+    <string name="force_english_summary">إجبار BurnfdsKit على استعمال الإنجليزية</string>
     <string name="force_english_title">إجبار الإنجليزية</string>
     <string name="language_toast">سيتم تغيير اللغة بعد إعادة تشغيل وحدة التطبيق</string>
-    <string name="firefds_kit_settings">Firefds Kit إعدادات</string>
+    <string name="firefds_kit_settings">BurnfdsKit إعدادات</string>
     <string name="default_text">الافتراضي</string>
     <string name="am_pm_on_clock_summary">إظهار AM/PM في ساعة شريط الحالة</string>
     <string name="am_pm_on_clock_title">إظهار AM/PM في الساعة</string>

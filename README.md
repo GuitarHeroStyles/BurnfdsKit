@@ -1,4 +1,4 @@
-# Firefds Kit [Baklava]
+# BurnfdsKit [Baklava]
 
 Xposed module for Samsung devices running Android 14 to Android 16 (One UI 6 - 8), built on the
 modern LSPosed / libxposed API (102).
@@ -13,6 +13,9 @@ exist.
 The original repository is no longer being updated, so this is now an independently maintained
 continuation by [GuitarHeroStyles](https://github.com/GuitarHeroStyles) that brings the module to
 Android 16 / One UI 8. All of the original design and most of the code are Firefds' work, thank you!
+
+This fork is now called **BurnfdsKit**. The package name (`sb.firefds.u.firefdskit`) is unchanged, so existing
+settings and the LSPosed scope keep working.
 
 ## Features
 
@@ -93,11 +96,11 @@ You need a root solution with an LSPosed compatible framework that supports the 
 [Vector](https://github.com/JingMatrix/Vector). Modules built with the old API still work on these
 frameworks, but this module uses the modern one.
 
-1. Install the Firefds Kit APK.
+1. Install the BurnfdsKit APK.
 2. Enable the module in the LSPosed manager and select its scope. The scope is fixed by the module,
-   make sure **System Framework** and **Firefds Kit itself** are checked.
+   make sure **System Framework** and **BurnfdsKit itself** are checked.
 3. Reboot.
-4. Open Firefds Kit once, so that your settings are copied to the framework.
+4. Open BurnfdsKit once, so that your settings are copied to the framework.
 
 The status card at the top of the app turns green when the module is active and has all of its
 permissions.
