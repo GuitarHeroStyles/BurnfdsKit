@@ -11,7 +11,7 @@ Kit, who built and maintained this module for years. The original project is
 exist.
 
 The original repository is no longer being updated, so this is now an independently maintained
-continuation by [GuitarHeroStyles](https://github.com/GuitarHeroStyles) that brings the module to
+continuation by [Lucky Kiddos](https://github.com/GuitarHeroStyles) that brings the module to
 Android 16 / One UI 8. All of the original design and most of the code are Firefds' work, thank you!
 
 This fork is now called **BurnfdsKit**. The package name changed from `sb.firefds.u.firefdskit` to `sb.burnfds.u.burnfdskit`, so it installs
