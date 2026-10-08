@@ -14,8 +14,8 @@ The original repository is no longer being updated, so this is now an independen
 continuation by [GuitarHeroStyles](https://github.com/GuitarHeroStyles) that brings the module to
 Android 16 / One UI 8. All of the original design and most of the code are Firefds' work, thank you!
 
-This fork is now called **BurnfdsKit**. The package name (`sb.firefds.u.firefdskit`) is unchanged, so existing
-settings and the LSPosed scope keep working.
+This fork is now called **BurnfdsKit**. The package name changed from `sb.firefds.u.firefdskit` to `sb.burnfds.u.burnfdskit`, so it installs
+as a new app: uninstall the old one, enable the new module in LSPosed and set your options again.
 
 ## Features
 
@@ -124,7 +124,7 @@ The project uses the following libraries:
 1. [libxposed](https://github.com/libxposed) - the modern Xposed API (102) and its service library
 2. https://github.com/rovo89/XposedBridge and
    https://github.com/rovo89/XposedMods/tree/master/XposedLibrary - the legacy API, whose helper
-   methods are re-implemented in `sb.firefds.u.firefdskit.xposed` on top of libxposed
+   methods are re-implemented in `sb.burnfds.u.burnfdskit.xposed` on top of libxposed
 3. Samsung framework libraries (from One UI 8) which are used for compile only
 
 ## Credits

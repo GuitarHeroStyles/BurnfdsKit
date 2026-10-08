@@ -4,15 +4,19 @@ android {
     compileSdk 36
 
     signingConfigs {
-        release {
-            storeFile file(STORE_FILE)
-            storePassword STORE_PASSWORD
-            keyAlias KEY_ALIAS
-            keyPassword KEY_PASSWORD
+        // Only set up when the keystore properties are given (-PSTORE_FILE=... or gradle.properties),
+        // otherwise the release APK is signed with the debug key so the project still builds.
+        if (project.hasProperty('STORE_FILE')) {
+            release {
+                storeFile file(STORE_FILE)
+                storePassword STORE_PASSWORD
+                keyAlias KEY_ALIAS
+                keyPassword KEY_PASSWORD
+            }
         }
     }
     defaultConfig {
-        applicationId 'sb.firefds.u.firefdskit'
+        applicationId 'sb.burnfds.u.burnfdskit'
         minSdkVersion 34
         targetSdkVersion 36
         versionCode 16002
@@ -27,7 +31,7 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            signingConfig project.hasProperty('STORE_FILE') ? signingConfigs.release : signingConfigs.debug
         }
         debug {
             // libxposed's service library uses Java records, which D8 only desugars in a full-program (R8) build
@@ -41,9 +45,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
-    namespace 'sb.firefds.u.firefdskit'
+    namespace 'sb.burnfds.u.burnfdskit'
     buildFeatures {
         buildConfig true
+    }
+    lint {
+        checkReleaseBuilds false
     }
 }
 
